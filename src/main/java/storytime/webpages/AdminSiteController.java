@@ -1,4 +1,4 @@
-package storytime.front;
+package storytime.webpages;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,28 +10,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @EnableAutoConfiguration
-public class StoryAdminPageController {
+public class AdminSiteController {
     Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @GetMapping("/admin/stories")
-    public String admin__stories(ModelMap model) {
-        log.info("getting admin/stories");
+    public String stories(ModelMap model) {
+        log.info("getting /admin/stories");
         return "admin/story-all-show";
     }
 
-    @GetMapping("/admin/story/{name}")
-    public String admin__story__name(ModelMap model,
-                                     @PathVariable("name") String name) {
-        log.info("getting admin/story/{}", name);
-        model.addAttribute("name", name);
+    @GetMapping("/admin/story/edit/{id}")
+    public String story__edit(ModelMap model,
+                              @PathVariable("id") long id) {
+        log.info("getting /admin/story/edit/{}", id);
+        model.addAttribute("id", id);
         return "admin/story-one-edit";
     }
 
     @GetMapping("/admin/story/new")
-    public String admin__story__new(ModelMap model) {
+    public String story__new(ModelMap model) {
         log.info("getting admin/story/new");
         return "admin/story-one-edit";
     }
-
 
 }

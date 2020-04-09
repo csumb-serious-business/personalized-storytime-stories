@@ -1,4 +1,4 @@
-package storytime.stories;
+package storytime.story;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +21,7 @@ public class StoryRestController {
     }
 
     @GetMapping("/api/0.0.1/{story-name}")
-    public ResponseEntity<Story> getStoryByName(
-            @PathVariable("story-name") String storyName) {
+    public ResponseEntity<Story> getStoryByName(@PathVariable("story-name") String storyName) {
         Optional<Story> fromService = service.getStoryByName(storyName);
 
         if (!fromService.isPresent()) {
