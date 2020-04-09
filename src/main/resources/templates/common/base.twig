@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block meta %}{% endblock %}
+    <title>{{ title }}</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+    {% include "snippets/head.twig" %}
+
+    <div class="page-header">
+        {% block head %}{% endblock %}
+    </div>
+
+</head>
+
+<body>
+{# margin to accommodate header bar #}
+
+{% block nav %}{% include "snippets/nav.twig" %}{% endblock %}
+{% block header %}{% include "snippets/header.twig" %}{% endblock %}
+
+{% block main %}
+    <div>
+        <h1>Blank Page</h1>
+        <p>You have just reached a work-in-progress!</p>
+        <a href="/">Back to the Home Page</a>
+    </div>
+
+{% endblock %}
+
+{% block footer %}{% endblock %}
+{% include "snippets/footer.twig" %}
+
+{% block modals %}{% endblock %}
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
