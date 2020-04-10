@@ -19,6 +19,10 @@ public class Parent {
     @Size(min = 3, max = 255)
     private String name;
 
+    @NotNull
+    @Size(min = 3, max = 255)
+    private String passphrase;
+
     @OneToMany
     private Set<Child> children;
 
@@ -30,6 +34,14 @@ public class Parent {
 
     public Parent() {
 
+    }
+
+    public String getPassphrase() {
+        return passphrase;
+    }
+
+    public void setPassphrase(String passphrase) {
+        this.passphrase = passphrase;
     }
 
     public Set<Child> getChildren() {
