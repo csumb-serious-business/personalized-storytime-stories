@@ -1,11 +1,8 @@
-package storytime.stories;
-
+package storytime.story;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import storytime.stories.Story;
-import storytime.stories.StoryRepository;
 
 import java.util.Optional;
 
@@ -34,6 +31,5 @@ public class StoryService {
     public void populateStories() {
 
     }
-
 
 }

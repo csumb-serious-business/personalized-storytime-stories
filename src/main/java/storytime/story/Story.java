@@ -1,5 +1,4 @@
-package storytime.stories;
-
+package storytime.story;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -30,5 +29,29 @@ public class Story {
 
     public Story() {
 
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
