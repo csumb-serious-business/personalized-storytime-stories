@@ -26,9 +26,10 @@ public class Parent {
     @OneToMany
     private Set<Child> children;
 
-    public Parent(long id, String name, Set<Child> children) {
+    public Parent(long id, String name, String passphrase, Set<Child> children) {
         this.id = id;
         this.name = name;
+        this.passphrase = passphrase;
         this.children = children;
     }
 

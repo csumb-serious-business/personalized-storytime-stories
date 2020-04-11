@@ -1,0 +1,11 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}"
+>
+
+<title th:inline="text">Welcome! [[${parent.name}]]</title>
+
+<div id="main">
+    <h1 th:inline="text">Welcome, [[${parent.name}]]</h1>
+</div>
+
+</html>

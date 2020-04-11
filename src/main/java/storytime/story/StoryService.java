@@ -21,11 +21,11 @@ public class StoryService {
         this.repo = storyRepository;
     }
 
-    public Optional<Story> getStoryByName(String name) {
-        log.info("getStoryByName -- {}", name);
+    public Optional<Story> getStoryById(long id) {
+        log.info("getStoryById -- {}", id);
 
         // sql => story
-        return repo.findByName(name).stream().findFirst();
+        return repo.findById(id).stream().findFirst();
     }
 
     public void populateStories() {
