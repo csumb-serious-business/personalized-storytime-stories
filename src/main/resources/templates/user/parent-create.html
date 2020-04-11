@@ -1,0 +1,23 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}"
+>
+
+<title>Create Your Parent Account</title>
+
+<div id="main">
+    <h1>Create Your Parent Account</h1>
+    <form action="#" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name"/>
+        <br/>
+
+        <label for="passphrase">Passphrase:</label>
+        <input type="text" id="passphrase"/>
+        <br/>
+
+        <input type="submit" value="Submit"/>
+
+    </form>
+</div>
+
+</html>

@@ -15,20 +15,21 @@ public class UserSiteController {
 
     @GetMapping("/")
     public String index(ModelMap model) {
-        log.info("getting / [index page]");
+        log.info("GET / [index page]");
+//        return "user/_index";
         return "user/_index";
     }
 
     @GetMapping("/sign-up")
     public String signup(ModelMap model) {
-        log.info("getting /signup");
+        log.info("GET /sign-up");
         return "user/parent-create";
     }
 
     @GetMapping("/parent/edit/{id}")
     public String parent__edit(ModelMap model,
                                @PathVariable("id") long id) {
-        log.info("getting /parent/edit/{}", id);
+        log.info("GET /parent/edit/{}", id);
         model.addAttribute("id", id);
         return "user/parent-edit";
     }
@@ -36,7 +37,7 @@ public class UserSiteController {
     @GetMapping("/parent/{id}/new-child")
     public String admin__story__new(ModelMap model,
                                     @PathVariable("id") long id) {
-        log.info("getting /parent/{}/new-child", id);
+        log.info("GET /parent/{}/new-child", id);
         model.addAttribute("id", id);
         return "user/child-create";
     }
@@ -45,7 +46,7 @@ public class UserSiteController {
     public String admin__story__new(ModelMap model,
                                     @PathVariable("id") long id,
                                     @PathVariable("child_id") long childId) {
-        log.info("getting /parent/{}/{}", id, childId);
+        log.info("GET /parent/{}/{}", id, childId);
         model.addAttribute("id", id);
         model.addAttribute("child_id", childId);
         return "user/child-edit";

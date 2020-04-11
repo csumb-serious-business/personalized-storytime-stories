@@ -128,4 +128,9 @@ public class StoryPreferences {
     public void setPetCharacterSpecies(String petCharacterSpecies) {
         this.petCharacterSpecies = petCharacterSpecies;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " -- " + this.id;
+    }
 }
