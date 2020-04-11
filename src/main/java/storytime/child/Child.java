@@ -82,4 +82,9 @@ public class Child {
         this.dislikedStories = dislikedStories;
     }
 
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " -- " + this.id;
+    }
 }

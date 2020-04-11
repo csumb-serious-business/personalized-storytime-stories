@@ -65,15 +65,10 @@
         </dependency>
 
         <!-- FRONTEND -->
-        <!-- jtwig - templating engine -->
-        <dependency>
-            <groupId>org.jtwig</groupId>
-            <artifactId>jtwig-spring-boot-starter</artifactId>
-            <version>5.87.0.RELEASE</version>
-        </dependency>
+        <!-- thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
         <!-- testing -->
