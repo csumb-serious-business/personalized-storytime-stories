@@ -1,4 +1,4 @@
-package storytime.webpages;
+package storytime.websites;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +15,13 @@ public class UserSiteController {
 
     @GetMapping("/")
     public String index(ModelMap model) {
-        log.info("getting / [index page]");
+        log.info("getting / [website root]");
         return "user/_index";
     }
 
     @GetMapping("/sign-up")
     public String signup(ModelMap model) {
-        log.info("getting /signup");
+        log.info("getting /sign-up");
         return "user/parent-create";
     }
 

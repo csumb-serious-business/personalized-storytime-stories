@@ -1,13 +1,25 @@
-{# todo #}
-Create Your Parent Account
+{% extends "../common/base.twig" %}
+{% set title="Create Your Parent Account" %}
 
-<form action="#" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name"/>
+{% block main %}
+    <h1>Create Your Parent Account</h1>
 
-    <label for="passphrase">Passphrase:</label>
-    <input type="text" id="passphrase"/>
+    <form action="#" method="post">
+        <fieldset class="form-section">
+            <div class="form-item">
+                <label for="name">Name:</label>
+                <input type="text" id="name"/>
+            </div>
+            <div class="form-item">
+                <label for="passphrase">Passphrase:</label>
+                <input type="text" id="passphrase"/>
+            </div>
+            <button id="btn-parent-create" class="btn btn-primary btn-lg">Create Account</button>
+        </fieldset>
 
-    <input type="submit" value="Submit"/>
+        {#        <input type="submit" value="Submit"/>#}
 
-</form>
+    </form>
+    {# user-site.js performs the form submit via ajax #}
+    <script src="js/user-site.js"></script>
+{% endblock %}
