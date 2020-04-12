@@ -1,0 +1,24 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}"
+>
+
+<title th:inline="text">Welcome! [[${parent.name}]]</title>
+
+<div id="main">
+    <h1 th:inline="text">Welcome, [[${parent.name}]]</h1>
+
+    <!-- list of children -->
+    <!-- for each child -->
+        <!-- edit prefs -->
+        <!-- favorite story cards (to read) --><!-- show hidden --><!-- only favorites-->
+        <div class="story-cards"></div>
+
+    <!-- add child -->
+    <div><a th:href="@{/parent/{id}/new-child(id=${parent.id})}">
+        <button>add child</button></a>
+    </div>
+
+
+</div>
+
+</html>
