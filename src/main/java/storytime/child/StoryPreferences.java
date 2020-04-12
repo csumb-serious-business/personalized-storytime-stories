@@ -131,6 +131,6 @@ public class StoryPreferences {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " -- " + this.id;
+        return this.getClass().getSimpleName() + "{" + this.id + "}";
     }
 }

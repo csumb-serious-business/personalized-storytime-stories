@@ -1,5 +1,6 @@
 package storytime.child;
 
+import io.micrometer.core.lang.NonNull;
 import storytime.parent.Parent;
 import storytime.story.Story;
 
@@ -20,9 +21,12 @@ public class Child {
     @Size(min = 3, max = 255)
     private String name;
 
-    @NotNull
-    @OneToMany
-    private Set<Parent> parents;
+    @NonNull
+    @OneToOne
+    private Parent parent;
+
+    @OneToOne
+    private StoryPreferences storyPreferences;
 
     @OneToMany
     private Set<Story> favoriteStories;
@@ -34,12 +38,21 @@ public class Child {
 
     }
 
-    public Child(long id, String name, Set<Parent> parents, Set<Story> favoriteStories, Set<Story> dislikedStories) {
+    public Child(long id, String name, Parent parent, StoryPreferences storyPreferences, Set<Story> favoriteStories, Set<Story> dislikedStories) {
         this.id = id;
         this.name = name;
-        this.parents = parents;
+        this.parent = parent;
+        this.storyPreferences = storyPreferences;
         this.favoriteStories = favoriteStories;
         this.dislikedStories = dislikedStories;
+    }
+
+    public StoryPreferences getStoryPreferences() {
+        return storyPreferences;
+    }
+
+    public void setStoryPreferences(StoryPreferences storyPreferences) {
+        this.storyPreferences = storyPreferences;
     }
 
     public long getId() {
@@ -58,12 +71,12 @@ public class Child {
         this.name = name;
     }
 
-    public Set<Parent> getParents() {
-        return parents;
+    public Parent getParent() {
+        return parent;
     }
 
-    public void setParents(Set<Parent> parents) {
-        this.parents = parents;
+    public void setParent(Parent parent) {
+        this.parent = parent;
     }
 
     public Set<Story> getFavoriteStories() {
@@ -85,6 +98,6 @@ public class Child {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " -- " + this.id;
+        return this.getClass().getSimpleName() + "{" + this.id + "}";
     }
 }

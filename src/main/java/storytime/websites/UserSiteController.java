@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import storytime.child.Child;
+import storytime.child.ChildService;
 import storytime.parent.Parent;
 import storytime.parent.ParentService;
 
@@ -24,12 +26,16 @@ public class UserSiteController {
     @Autowired
     ParentService parentService;
 
+    @Autowired
+    ChildService childService;
+
     @GetMapping("/")
     public String index() {
         log.info("GET / [website root]");
         return "user/_index";
     }
 
+    /*--- Parent Account ----------------------------------------------------*/
     @GetMapping("/sign-up")
     public String signup(Model model) {
         log.info("GET /sign-up");
@@ -47,37 +53,68 @@ public class UserSiteController {
 
         log.info("POST /sign-up -- parent: {}", parent);
         parentService.persist(parent);
-        String url = "/parent/" + parent.getId() + "/welcome";
+        String url = "/parent/" + parent.getId();
         log.info("redirecting to: {}", url);
 
         return "redirect:" + url;
     }
 
-    @GetMapping("/parent/{id}/welcome")
-    public String parentWelcome(Model model,
-                                @PathVariable("id") long id) {
-        log.info("GET /parent/{}/welcome", id);
+    @GetMapping("/parent/{id}")
+    public String parent__id(Model model,
+                             @PathVariable("id") long id) {
+        log.info("GET /parent/{}", id);
 
-        model.addAttribute(parentService.getParentById(id).orElse(new Parent(-1, "name", "passphrase", null)));
+        // todo should 404 if parent not found
+        parentService.getParentById(id).ifPresent(model::addAttribute);
 
-        return "user/parent-welcome";
+        return "user/parent-home";
     }
 
-
     @GetMapping("/parent/{id}/edit")
-    public String parent__edit(Model model,
+    public String parent__id__edit(Model model,
                                @PathVariable("id") long id) {
         log.info("GET /parent/edit/{}", id);
         model.addAttribute("id", id);
         return "user/parent-edit";
     }
 
+    /*--- Child & Child Prefs -----------------------------------------------*/
     @GetMapping("/parent/{id}/new-child")
-    public String admin__story__new(Model model,
-                                    @PathVariable("id") long id) {
+    public String parent__id__new_child(Model model,
+                                        @PathVariable("id") long id) {
         log.info("GET /parent/{}/new-child", id);
-        model.addAttribute("id", id);
+
+        Child child = new Child();
+
+        // todo should 404 if parent not found
+        parentService.getParentById(id).ifPresent(model::addAttribute);
+        model.addAttribute("child", child);
+
         return "user/child-create";
+    }
+
+    @PostMapping("/parent/{id}/new-child")
+    public String parent__id__new_child(Model model,
+                                        @PathVariable("id") long id,
+                                        @Valid @ModelAttribute("child") Child child,
+                                        BindingResult result) {
+
+        parentService.getParentById(id).ifPresent(child::setParent);
+
+        if (result.hasErrors()) {
+            log.info("result: {}", result);
+            return "user/child-create";
+        }
+
+        log.info("POST /parent/{}/new-child -- child {}", id, child);
+
+        childService.persist(child);
+//        String url = "/parent/" + id + "/welcome";
+//        log.info("redirecting to: {}", url);
+
+
+//        return "redirect:" + url;
+        return parent__id(model, id);
     }
 
     @GetMapping("/parent/{id}/{child_id}")
