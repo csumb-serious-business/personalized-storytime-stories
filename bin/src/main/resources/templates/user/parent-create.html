@@ -1,0 +1,32 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}"
+>
+
+<title>Create Your Parent Account</title>
+
+<div id="main">
+    <h1>Create Your Parent Account</h1>
+    <form th:action="@{/sign-up}" th:object="${parent}" method="post">
+        <fieldset class="form-section">
+            <div class="form-item">
+                <label for="name">Name:</label>
+                <input type="text" id="name" th:field="*{name}"/>
+                <span th:if="${#fields.hasErrors('name')}"
+                      th:errors="*{name}"></span><br/>
+            </div>
+            <div class="form-item">
+                <label for="passphrase">Passphrase:</label>
+                <input type="text" id="passphrase" th:field="*{passphrase}"/>
+                <span th:if="${#fields.hasErrors('passphrase')}"
+                      th:errors="*{passphrase}"></span><br/>
+            </div>
+            <div class="form-item">
+                <input type="submit" value="Submit"/>
+            </div>
+        </fieldset>
+
+
+    </form>
+</div>
+
+</html>

@@ -1,0 +1,27 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}"
+>
+
+<title>Setup a Preferences Profile for your child.</title>
+
+<div id="main">
+    <h1>Setup a Preferences Profile for your child.</h1>
+    <form th:action="@{/parent/{id}/new-child(id=${id})}"
+          th:object="${child}" method="post">
+        <fieldset class="form-section">
+            <div class="form-item">
+                <label for="name">Name:</label>
+                <input type="text" id="name" th:field="*{name}"/>
+                <span th:if="${#fields.hasErrors('name')}"
+                      th:errors="*{name}"></span><br/>
+            </div>
+            <div class="form-item">
+                <input type="submit" value="Submit"/>
+            </div>
+        </fieldset>
+
+
+    </form>
+</div>
+
+</html>

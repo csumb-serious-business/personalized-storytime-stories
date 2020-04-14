@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout (title, main, scripts, meta)"
+>
+<head>
+    <meta charset="utf-8">
+    <template th:replace="${meta}">&nbsp;</template>
+
+    <!-- todo parameterize title-->
+    <title th:replace="${title}"></title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <template th:replace="common/snippets/head"></template>
+
+</head>
+<body>
+
+<template th:replace="common/snippets/nav"></template>
+<template th:replace="common/snippets/header"></template>
+
+<template th:replace="${main}"></template>
+
+<template th:replace="common/snippets/footer"></template>
+
+<template th:replace="${scripts}"></template>
+</body>
+</html>
