@@ -22,7 +22,8 @@ public class Child {
     private String name;
 
     @NonNull
-    @OneToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "parent_id")
     private Parent parent;
 
     @OneToOne

@@ -23,7 +23,8 @@ public class Parent {
     @Size(min = 3, max = 255)
     private String passphrase;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "parent_id")
     private Set<Child> children;
 
     public Parent(long id, String name, String passphrase, Set<Child> children) {

@@ -72,7 +72,7 @@ public class UserSiteController {
 
     @GetMapping("/parent/{id}/edit")
     public String parent__id__edit(Model model,
-                               @PathVariable("id") long id) {
+                                   @PathVariable("id") long id) {
         log.info("GET /parent/edit/{}", id);
         model.addAttribute("id", id);
         return "user/parent-edit";
@@ -109,11 +109,7 @@ public class UserSiteController {
         log.info("POST /parent/{}/new-child -- child {}", id, child);
 
         childService.persist(child);
-//        String url = "/parent/" + id + "/welcome";
-//        log.info("redirecting to: {}", url);
 
-
-//        return "redirect:" + url;
         return parent__id(model, id);
     }
 
