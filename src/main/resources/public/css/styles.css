@@ -86,24 +86,15 @@ form {
 	padding-block: 10%;
 	margin-block: 10%;
 }
-/*#footer-id {
-    background: black;
-    text-align: center;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    margin-block: 5%;
-    border: 1px solid;
-}*/
+
 #footer-id {
 	background: black;
 	text-align: center;
-	font-size: 0.6em;
+	font-size: 0.8em;
 	color: white;
-	position: absolute;
-	bottom: 0px;
-	height: 3rem; width : 100%;
-	border: 3px solid black;
-	width: 100%;
+	position: fixed;
+	bottom: 0;
+	width : 100%;
 }
 
 .jumbotron {
