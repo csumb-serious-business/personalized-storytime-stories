@@ -19,7 +19,9 @@ https://fonts.google.com/?sort=alpha&thickness=5&selection.family=Cinzel+Decorat
 -->
 
 <!-- client javascript -->
-<script src="js/client.js"></script>
+<!-- th:src is not an error, thymeleaf is poor at templating html head elements -->
+<script th:src="@{~/js/client.js}"></script>
 
 <!-- custom styles -->
-<link href="css/styles.css" rel="stylesheet" type="text/css">
+<!-- th:src is not an error, thymeleaf is poor at templating html head elements -->
+<link th:href="@{~/css/styles.css}" rel="stylesheet" type="text/css">

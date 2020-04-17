@@ -24,7 +24,7 @@ public class ParentService {
     }
 
     public Optional<Parent> getParentById(long id) {
-        log.info("getParentById -- {}", id);
+        log.info("getParentById({})", id);
         return repo.findById(id).stream().findFirst();
     }
 
@@ -36,4 +36,5 @@ public class ParentService {
         }
         return true;
     }
+
 }

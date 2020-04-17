@@ -1,0 +1,15 @@
+<div class="child-details"
+     xmlns:th="http://www.thymeleaf.org"
+     th:fragment="layout(child)"
+>
+    <!-- for each child -->
+    <div><span>[[${child.name}]]</span>
+        <!-- edit prefs -->
+        <a href="#">edit prefs icon</a>
+        <div>
+            <!-- favorite story cards (to read) --><!-- show hidden --><!-- only favorites-->
+            <span>favorite stories</span><span>show hidden</span><span>only favorites</span>
+        </div>
+    </div>
+    <br/>
+</div>

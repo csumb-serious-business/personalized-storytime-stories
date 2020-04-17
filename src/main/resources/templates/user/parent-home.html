@@ -8,14 +8,19 @@
     <h1 th:inline="text">Welcome, [[${parent.name}]]</h1>
 
     <!-- list of children -->
-    <!-- for each child -->
-        <!-- edit prefs -->
-        <!-- favorite story cards (to read) --><!-- show hidden --><!-- only favorites-->
-        <div class="story-cards"></div>
+    <div th:if="${!parent.children.isEmpty()}">
+        <span>Children</span>
+        <div th:each="child : ${parent.children}">
+            <template th:replace="~{user/snippets/child-details :: layout(${child})}"></template>
+        </div>
+    </div>
+
+    <div></div>
 
     <!-- add child -->
     <div><a th:href="@{/parent/{id}/new-child(id=${parent.id})}">
-        <button>add child</button></a>
+        <button>add child</button>
+    </a>
     </div>
 
 
