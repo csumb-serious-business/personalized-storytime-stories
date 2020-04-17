@@ -28,6 +28,12 @@ public class ParentService {
         return repo.findById(id).stream().findFirst();
     }
 
+    public Optional<Parent> getParentByUsername(String username){
+        log.info("getParentByUsername({})", username);
+        return repo.findByUsername(username).stream().findFirst();
+
+    }
+
     public boolean persist(Parent parent) {
         try {
             repo.save(parent);

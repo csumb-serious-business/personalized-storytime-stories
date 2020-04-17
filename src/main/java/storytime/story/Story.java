@@ -2,7 +2,6 @@ package storytime.story;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "STORY")
@@ -12,18 +11,17 @@ public class Story {
     private long id;
 
     @Lob
-    @Column(name = "NAME", columnDefinition = "CLOB")
+    @Column(name = "TITLE")
     @NotNull
-    @Size(min = 1, max = 2056)
-    private String name;
+    private String title;
 
     @Lob
-    @Column(name = "CONTENT", columnDefinition = "CLOB")
+    @Column(name = "CONTENT")
     private String content;
 
-    public Story(long id, String name, String content) {
+    public Story(long id, String title, String content) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.content = content;
     }
 
@@ -39,12 +37,12 @@ public class Story {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public String getContent() {
