@@ -1,96 +1,90 @@
 /** this will contain site-wide css */
 
-
 /* #sm-table tbody tr {
     background-color: gray;
 } */
-
-h1{
-	font-size:2em;
+h1 {
+	font-size: 2em;
 }
 
-h2{
-	font-size:1em;
-}
-
-#sm-table tbody tr:hover {
-    filter: invert();
-}
-
-form {
-    display: flex;
-    flex-flow: row wrap;
-    row-gap: 2em;
-}
-
-.form-section {
-    display: table;
-    float: left;
-    margin-left: 2vw;
-    border-spacing: .25em;
-    border-collapse: separate;
-    border: 0;
-}
-
-.form-section .form-item {
-    display: table-row;
-}
-
-.form-item>* {
-    display: table-cell;
-    margin: .5em;
-}
-
-.form-item .form-msg {
-    font-family: 'Berkshire Swash', cursive;
-    font-size: 1.3em;
-    padding: 0 0 0 1em;
-}
-
-.form-item input[type=radio] {
-    margin-left: .5em;
-}
-
-.form-item span {
-    font-size: inherit;
-    font-weight: bolder;
-}
-
-.form-span {
-    margin-bottom: .5em;
-}
-
-#mi-image {
-    max-width: 80%;
-}
-
-.page-header {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
-.navbar-inverse,
-ul.nav li a,
-ul.nav li a:visited,
-ul.nav li a:hover,
-ul.nav li a:active,
-ul.nav li.active a {
-	padding:0;
-    background: black;
-    font-size: 1em;
-    font-weight: bolder;
-    color: white !important;
-    text-decoration: none;
-    text-align: center;
-}
-
-.navbar-brand{
+h2 {
 	font-size: 1em;
 }
 
-#password,
-#username {
-    padding-block: 10%;
-    margin-block: 10%;
+#sm-table tbody tr:hover {
+	filter: invert();
+}
+
+form {
+	display: flex;
+	flex-flow: row wrap;
+	row-gap: 2em;
+}
+
+.form-section {
+	display: table;
+	float: left;
+	margin-left: 2vw;
+	border-spacing: .25em;
+	border-collapse: separate;
+	border: 0;
+}
+
+.form-section .form-item {
+	display: table-row;
+}
+
+.form-item>* {
+	display: table-cell;
+	margin: .5em;
+}
+
+.form-item .form-msg {
+	font-family: 'Berkshire Swash', cursive;
+	font-size: 1.3em;
+	padding: 0 0 0 1em;
+}
+
+.form-item input[type=radio] {
+	margin-left: .5em;
+}
+
+.form-item span {
+	font-size: inherit;
+	font-weight: bolder;
+}
+
+.form-span {
+	margin-bottom: .5em;
+}
+
+#mi-image {
+	max-width: 80%;
+}
+
+.page-header {
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+		'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.navbar-inverse, ul.nav li a, ul.nav li a:visited, ul.nav li a:hover, ul.nav li a:active,
+	ul.nav li.active a {
+	padding: 0;
+	background: black;
+	font-size: 1em;
+	font-weight: bolder;
+	color: white !important;
+	text-decoration: none;
+	text-align: center;
+}
+
+.navbar-brand {
+	font-size: 1em;
+}
+
+#password, #username {
+	padding-block: 10%;
+	margin-block: 10%;
 }
 /*#footer-id {
     background: black;
@@ -100,72 +94,62 @@ ul.nav li.active a {
     margin-block: 5%;
     border: 1px solid;
 }*/
-
-
 #footer-id {
-    background: black;
-    text-align: center;
-    margin-block: 5%;
-    border: 1px solid;
-	font-size:0.5em;
-	color:white;
-    position: absolute;
- 	bottom: 0;
-  	width: 100%;
-  	height: 3 rem; /* Footer height */
+	background: black;
+	text-align: center;
+	font-size: 0.6em;
+	color: white;
+	position: absolute;
+	bottom: 0px;
+	height: 3rem; width : 100%;
+	border: 3px solid black;
+	width: 100%;
 }
 
-
-
-.jumbotron{
- 	background-color: #f4511e;
-  	border-radius: 0 !important; /* Remove rounded edges */
-    color: #ffffff;
+.jumbotron {
+	background-color: #f4511e;
+	border-radius: 0 !important; /* Remove rounded edges */
+	color: #ffffff;
 	padding: 1px;
 }
 
 .col-sm-3 {
-    padding-left: 1%;
-    padding-bottom: 1%;
+	padding-left: 1%;
+	padding-bottom: 1%;
 }
-
 
 /* .col-sm-8 {
     padding-right: 1%;
 } */
-
 .row {
-    flex-wrap: wrap;
-    margin-right: 1%;
-    margin-left: 1%;
+	flex-wrap: wrap;
+	margin-right: 1%;
+	margin-left: 1%;
 }
 
 .navbar-nav {
-    display: flex;
-    flex-direction: row;
-    /* width: 10%; */
+	display: flex;
+	flex-direction: row;
+	/* width: 10%; */
 }
 
-#navHome,
-#navSignIn {
-    padding: 1%;
-    background-color: white;
+#navHome, #navSignIn {
+	padding: 1%;
+	background-color: white;
 }
 
-#main{
-  margin: auto;
-  text-align: center;
-  width: 60%;
-  border-style:solid;
-  border-width: medium;
-  border-color: #f4511e;
-  padding: 10px;
+#main {
+	margin: auto;
+	text-align: center;
+	width: 60%;
+	border-style: solid;
+	border-width: medium;
+	border-color: #f4511e;
+	padding: 10px;
 }
-
-
 
 .signin-section {
-    display: table-column;
-    padding: 1%;
-    padding-bottom: 10%;
+	display: table-column;
+	padding: 1%;
+	padding-bottom: 10%;
 }
