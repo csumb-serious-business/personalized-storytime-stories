@@ -2,11 +2,11 @@
       th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}"
 >
 
-<title>Create Your Parent Account</title>
+<title>Sign Into Your Parent Account</title>
 
 <div id="main">
-    <h1>Create Your Parent Account</h1>
-    <form th:action="@{/sign-up}" th:object="${parent}" method="post">
+    <h1>Sign Into Your Parent Account</h1>
+    <form th:action="@{/sign-in}" th:object="${parent}" method="post">
         <fieldset class="form-section">
             <div class="form-item">
                 <label for="name">Name:</label>
@@ -28,8 +28,6 @@
                 <input type="submit" value="Submit"/>
             </div>
         </fieldset>
-
-
     </form>
 </div>
 

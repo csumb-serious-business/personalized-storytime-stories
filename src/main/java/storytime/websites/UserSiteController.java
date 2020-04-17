@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import storytime.parent.Parent;
 import storytime.parent.ParentService;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @EnableAutoConfiguration
@@ -37,27 +39,75 @@ public class UserSiteController {
 
     /*--- Parent Account ----------------------------------------------------*/
     @GetMapping("/sign-up")
-    public String signup(Model model) {
+    public String sign_up(Model model) {
         log.info("GET /sign-up");
         model.addAttribute("parent", new Parent());
         return "user/parent-create";
     }
 
     @PostMapping("/sign-up")
-    public String signup(@Valid @ModelAttribute("parent") Parent parent,
-                         BindingResult result) {
+    public String sign_up(@Valid @ModelAttribute("parent") Parent parent,
+                          BindingResult result) {
 
         if (result.hasErrors()) {
             return "user/parent-create";
         }
 
-        log.info("POST /sign-up -- parent: {}", parent);
-        parentService.persist(parent);
+        log.info("POST /sign-up -- parent");
+
+        // persist will only fail on dupe username?
+        if (!parentService.persist(parent)) {
+            result.rejectValue("username", "error.user",
+                    parent.getUsername() +
+                            " is already taken.");
+            return "user/parent-create";
+        }
+
         String url = "/parent/" + parent.getId();
         log.info("redirecting to: {}", url);
 
         return "redirect:" + url;
     }
+
+    @GetMapping("/sign-in")
+    public String sign_in(Model model) {
+        log.info("GET /sign-in");
+        model.addAttribute("parent", new Parent());
+        return "user/parent-sign-in";
+    }
+
+    @PostMapping("/sign-in")
+    public String sign_in(@Valid @ModelAttribute("parent") Parent parent,
+                          BindingResult result) {
+
+        // check for basic validation fail
+        if (result.hasErrors()) {
+            return "user/parent-sign-in";
+        }
+
+        // lookup the actual username/passphrase to auth
+        Optional<Parent> actual = parentService.getParentByUsername(parent.getUsername());
+
+        // username doesn't exist or passphrase doesn't match
+        if (!actual.isPresent()) {
+            log.info("{} not found", parent);
+            result.reject("sign_in",
+                    "Either the username doesn't exist or passphrase is incorrect");
+            return "user/parent-sign-in";
+        } else if (!actual.get().getPassphrase().equals(parent.getPassphrase())) {
+            log.info("{} != {}", parent.getPassphrase(), actual.get().getPassphrase());
+            result.reject("sign_in",
+                    "Either the username doesn't exist or passphrase is incorrect");
+            return "user/parent-sign-in";
+        }
+
+        log.info("POST /sign-in -- parent: {}", parent);
+        String url = "/parent/" + actual.get().getId();
+        log.info("redirecting to: {}", url);
+
+        return "redirect:" + url;
+    }
+
 
     @GetMapping("/parent/{id}")
     public String parent__id(Model model,

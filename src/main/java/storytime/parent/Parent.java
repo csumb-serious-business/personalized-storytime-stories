@@ -17,7 +17,8 @@ public class Parent {
 
     @NotNull
     @Size(min = 3, max = 255)
-    private String name;
+    @Column(unique = true)
+    private String username;
 
     @NotNull
     @Size(min = 3, max = 255)
@@ -25,11 +26,12 @@ public class Parent {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "parent_id")
+    @OrderBy(value = "name")
     private Set<Child> children;
 
-    public Parent(long id, String name, String passphrase, Set<Child> children) {
+    public Parent(long id, String username, String passphrase, Set<Child> children) {
         this.id = id;
-        this.name = name;
+        this.username = username;
         this.passphrase = passphrase;
         this.children = children;
     }
@@ -62,12 +64,12 @@ public class Parent {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     @Override

@@ -2,10 +2,10 @@
       th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}"
 >
 
-<title th:inline="text">Welcome! [[${parent.name}]]</title>
+<title th:inline="text">Welcome! [[${parent.username}]]</title>
 
 <div id="main">
-    <h1 th:inline="text">Welcome, [[${parent.name}]]</h1>
+    <h1 th:inline="text">Welcome, [[${parent.username}]]</h1>
 
     <!-- list of children -->
     <div th:if="${!parent.children.isEmpty()}">

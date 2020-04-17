@@ -1,3 +1,7 @@
+# secret local DB properties
+secret.properties
+
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
