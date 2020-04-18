@@ -1,1 +1,2 @@
+DROP DATABASE IF EXISTS `serious-stories`;
 CREATE DATABASE IF NOT EXISTS `serious-stories` DEFAULT CHARACTER SET utf8mb4;

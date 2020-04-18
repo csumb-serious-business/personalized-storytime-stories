@@ -7,13 +7,14 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import storytime.child.Child;
 import storytime.child.ChildService;
+import storytime.child.StoryPreferences;
+import storytime.child.StoryPreferencesService;
 import storytime.parent.Parent;
 import storytime.parent.ParentService;
 
@@ -23,13 +24,16 @@ import java.util.Optional;
 @Controller
 @EnableAutoConfiguration
 public class UserSiteController {
-    Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
+    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
     ParentService parentService;
 
     @Autowired
     ChildService childService;
+
+    @Autowired
+    StoryPreferencesService storyPreferencesService;
 
     @GetMapping("/")
     public String index() {
@@ -46,8 +50,7 @@ public class UserSiteController {
     }
 
     @PostMapping("/sign-up")
-    public String sign_up(@Valid @ModelAttribute("parent") Parent parent,
-                          BindingResult result) {
+    public String sign_up(@Valid @ModelAttribute("parent") Parent parent, BindingResult result) {
 
         if (result.hasErrors()) {
             return "user/parent-create";
@@ -57,9 +60,7 @@ public class UserSiteController {
 
         // persist will only fail on dupe username?
         if (!parentService.persist(parent)) {
-            result.rejectValue("username", "error.user",
-                    parent.getUsername() +
-                            " is already taken.");
+            result.rejectValue("username", "error.user", parent.getUsername() + " is already taken.");
             return "user/parent-create";
         }
 
@@ -77,8 +78,7 @@ public class UserSiteController {
     }
 
     @PostMapping("/sign-in")
-    public String sign_in(@Valid @ModelAttribute("parent") Parent parent,
-                          BindingResult result) {
+    public String sign_in(@Valid @ModelAttribute("parent") Parent parent, BindingResult result) {
 
         // check for basic validation fail
         if (result.hasErrors()) {
@@ -91,13 +91,11 @@ public class UserSiteController {
         // username doesn't exist or passphrase doesn't match
         if (!actual.isPresent()) {
             log.info("{} not found", parent);
-            result.reject("sign_in",
-                    "Either the username doesn't exist or passphrase is incorrect");
+            result.reject("sign_in", "Either the username doesn't exist or passphrase is incorrect");
             return "user/parent-sign-in";
         } else if (!actual.get().getPassphrase().equals(parent.getPassphrase())) {
             log.info("{} != {}", parent.getPassphrase(), actual.get().getPassphrase());
-            result.reject("sign_in",
-                    "Either the username doesn't exist or passphrase is incorrect");
+            result.reject("sign_in", "Either the username doesn't exist or passphrase is incorrect");
             return "user/parent-sign-in";
         }
 
@@ -108,10 +106,8 @@ public class UserSiteController {
         return "redirect:" + url;
     }
 
-
     @GetMapping("/parent/{id}")
-    public String parent__id(Model model,
-                             @PathVariable("id") long id) {
+    public String parent__id(Model model, @PathVariable("id") long id) {
         log.info("GET /parent/{}", id);
 
         // todo should 404 if parent not found
@@ -121,8 +117,7 @@ public class UserSiteController {
     }
 
     @GetMapping("/parent/{id}/edit")
-    public String parent__id__edit(Model model,
-                                   @PathVariable("id") long id) {
+    public String parent__id__edit(Model model, @PathVariable("id") long id) {
         log.info("GET /parent/edit/{}", id);
         model.addAttribute("id", id);
         return "user/parent-edit";
@@ -130,15 +125,12 @@ public class UserSiteController {
 
     /*--- Child & Child Prefs -----------------------------------------------*/
     @GetMapping("/parent/{id}/new-child")
-    public String parent__id__new_child(Model model,
-                                        @PathVariable("id") long id) {
+    public String parent__id__new_child(Model model, @PathVariable("id") long id) {
         log.info("GET /parent/{}/new-child", id);
-
-        Child child = new Child();
 
         // todo should 404 if parent not found
         parentService.getParentById(id).ifPresent(model::addAttribute);
-        model.addAttribute("child", child);
+        model.addAttribute("child", new Child());
 
         return "user/child-create";
     }
@@ -163,13 +155,57 @@ public class UserSiteController {
         return parent__id(model, id);
     }
 
-    @GetMapping("/parent/{id}/{child_id}")
-    public String admin__story__new(Model model,
-                                    @PathVariable("id") long id,
-                                    @PathVariable("child_id") long childId) {
-        log.info("GET /parent/{}/{}", id, childId);
-        model.addAttribute("id", id);
-        model.addAttribute("child_id", childId);
-        return "user/child-edit";
+    @GetMapping("/parent/{pid}/child/{cid}/prefs")
+    public String parent__pid__child__cid__prefs(Model model,
+                                                 @PathVariable("pid") long parentId,
+                                                 @PathVariable("cid") long childId) {
+        log.info("GET /parent/{}/child/{}/prefs", parentId, childId);
+
+        // todo should 404 if parent or child not found
+        parentService.getParentById(parentId).ifPresent(model::addAttribute);
+        childService.getChildById(childId).ifPresent(c -> {
+
+            // if child exists add it
+            model.addAttribute(c);
+
+            // if child's prefs exist, add them, otherwise add a new one
+            storyPreferencesService.getStoryPreferencesByOwner(c)
+                    .ifPresentOrElse(
+                            model::addAttribute,
+                            () -> model.addAttribute(new StoryPreferences())
+                    );
+        });
+
+
+        return "user/child-prefs";
+    }
+
+    @PostMapping("/parent/{pid}/child/{cid}/prefs")
+    public String parent__pid__child__cid__prefs(Model model,
+                                                 @PathVariable("pid") long parentId,
+                                                 @PathVariable("cid") long childId,
+                                                 @ModelAttribute Parent parent,
+                                                 @ModelAttribute Child child,
+                                                 @Valid @ModelAttribute StoryPreferences storyPreferences,
+                                                 BindingResult result) {
+
+        // story prefs owner is child
+        childService.getChildById(childId).ifPresent(c -> {
+            log.info("child found: {}", c);
+            storyPreferences.setOwner(c);
+        });
+
+        if (result.hasErrors()) {
+            log.info("result: {}", result);
+
+            // todo resets path to 0/0 after validation failure
+            return "user/child-prefs";
+        }
+
+        log.info("POST /parent/{}/child/{}/prefs", parentId, childId);
+
+        storyPreferencesService.persist(storyPreferences);
+
+        return parent__id(model, parentId);
     }
 }
