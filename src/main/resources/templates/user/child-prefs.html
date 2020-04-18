@@ -1,0 +1,76 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}"
+>
+
+<title>Setup [[${child.name}]]'s Storytime Preferences.</title>
+
+<div id="main">
+    <h1>Setup [[${child.name}]]'s Storytime Preferences.</h1>
+    <form th:action="@{/parent/{pid}/child/{cid}/prefs(pid=${parent.id}, cid=${child.id})}"
+          th:object="${storyPreferences}" method="post">
+        <fieldset class="form-section">
+
+            <div class="form-item">
+                <label for="setting">Story Setting:</label>
+                <input type="text" id="setting" th:field="*{setting}"/>
+                <span th:if="${#fields.hasErrors('setting')}"
+                      th:errors="*{setting}"></span><br/>
+            </div>
+
+            <div class="form-item">
+                <label for="protagonistCharacterName">Main Character's Name:</label>
+                <input type="text" id="protagonistCharacterName" th:field="*{protagonistCharacterName}"/>
+                <span th:if="${#fields.hasErrors('protagonistCharacterName')}"
+                      th:errors="*{protagonistCharacterName}"></span><br/>
+            </div>
+
+            <div class="form-item">
+                <label for="momCharacterName">Mom Character's Name:</label>
+                <input type="text" id="momCharacterName" th:field="*{momCharacterName}"/>
+                <span th:if="${#fields.hasErrors('momCharacterName')}"
+                      th:errors="*{momCharacterName}"></span><br/>
+            </div>
+
+            <div class="form-item">
+                <label for="dadCharacterName">Dad Character's Name:</label>
+                <input type="text" id="dadCharacterName" th:field="*{dadCharacterName}"/>
+                <span th:if="${#fields.hasErrors('dadCharacterName')}"
+                      th:errors="*{dadCharacterName}"></span><br/>
+            </div>
+
+            <div class="form-item">
+                <label for="brotherCharacterName">Brother Character's Name:</label>
+                <input type="text" id="brotherCharacterName" th:field="*{brotherCharacterName}"/>
+                <span th:if="${#fields.hasErrors('brotherCharacterName')}"
+                      th:errors="*{brotherCharacterName}"></span><br/>
+            </div>
+
+            <div class="form-item">
+                <label for="sisterCharacterName">Sister Character's Name:</label>
+                <input type="text" id="sisterCharacterName" th:field="*{sisterCharacterName}"/>
+                <span th:if="${#fields.hasErrors('sisterCharacterName')}"
+                      th:errors="*{sisterCharacterName}"></span><br/>
+            </div>
+
+            <div class="form-item">
+                <label for="petCharacterName">Pet Character's Name:</label>
+                <input type="text" id="petCharacterName" th:field="*{petCharacterName}"/>
+                <span th:if="${#fields.hasErrors('petCharacterName')}"
+                      th:errors="*{petCharacterName}"></span><br/>
+            </div>
+
+            <div class="form-item">
+                <label for="petCharacterSpecies">Pet Character's Species:</label>
+                <input type="text" id="petCharacterSpecies" th:field="*{petCharacterSpecies}"/>
+                <span th:if="${#fields.hasErrors('petCharacterSpecies')}"
+                      th:errors="*{petCharacterSpecies}"></span><br/>
+            </div>
+
+            <div class="form-item">
+                <input type="submit" value="Submit"/>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+</html>

@@ -1,7 +1,11 @@
 package storytime.child;
 
+
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "STORY_PREFERENCES")
@@ -10,32 +14,40 @@ public class StoryPreferences {
     @GeneratedValue
     private long id;
 
-    @NotNull
+    @NonNull
     @OneToOne
     private Child owner;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String setting;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String protagonistCharacterName;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String momCharacterName;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String dadCharacterName;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String brotherCharacterName;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String sisterCharacterName;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String petCharacterName;
 
     @NotNull
+    @Size(min = 3, max = 255)
     private String petCharacterSpecies;
 
     public StoryPreferences() {
@@ -43,8 +55,8 @@ public class StoryPreferences {
     }
 
     public StoryPreferences(long id, Child owner, String setting, String protagonistCharacterName,
-                            String momCharacterName, String dadCharacterName, String brotherCharacterName,
-                            String sisterCharacterName, String petCharacterName, String petCharacterSpecies) {
+                            String momCharacterName, String dadCharacterName, String brotherCharacterName, String sisterCharacterName,
+                            String petCharacterName, String petCharacterSpecies) {
         this.id = id;
         this.owner = owner;
         this.setting = setting;
@@ -79,6 +91,14 @@ public class StoryPreferences {
 
     public void setProtagonistCharacterName(String protagonistCharacterName) {
         this.protagonistCharacterName = protagonistCharacterName;
+    }
+
+    public Child getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Child owner) {
+        this.owner = owner;
     }
 
     public String getMomCharacterName() {

@@ -1,12 +1,14 @@
-# secret local DB properties
-secret.properties
-
-
-target/
+# general un-ignores
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
+
+# general ignores
 bin/
+target/
+
+# secret local DB properties
+**/secret.properties
 
 ### STS ###
 .apt_generated
@@ -33,3 +35,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+

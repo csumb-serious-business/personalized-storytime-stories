@@ -11,11 +11,9 @@
     <div th:if="${!parent.children.isEmpty()}">
         <span>Children</span>
         <div th:each="child : ${parent.children}">
-            <template th:replace="~{user/snippets/child-details :: layout(${child})}"></template>
+            <template th:replace="~{user/snippets/child-details :: layout(${parent}, ${child})}"></template>
         </div>
     </div>
-
-    <div></div>
 
     <!-- add child -->
     <div><a th:href="@{/parent/{id}/new-child(id=${parent.id})}">
