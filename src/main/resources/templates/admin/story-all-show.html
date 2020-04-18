@@ -1,4 +1,27 @@
-This contains admin level info about stories
+<!-- This contains admin level info about stories
 including a list of stories with options to modify them
 
-needs a button to create a new story
+needs a button to create a new story -->
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}">
+
+<title>Welcome to Serious Storytime!</title>
+<div id="main">
+	<h1>Admin Panel</h1>
+
+	<!-- add new story -->
+	<div>
+		<a th:href="@{/admin/story/new}">
+			<button>Add New Story</button>
+		</a>
+	</div>
+	<br>
+	<div>
+		<a th:href="@{/admin/story/edit/{id}(id=${id})}">
+			<button>Edit Story</button>
+		</a>
+	</div>
+</div>
+
+</html>

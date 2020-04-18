@@ -78,6 +78,10 @@ form {
 	text-align: center;
 }
 
+#admin-link{
+	padding-left: 20px;
+}
+
 .navbar-brand {
 	font-size: 1em;
 }
