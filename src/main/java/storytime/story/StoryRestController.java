@@ -21,7 +21,7 @@ public class StoryRestController {
     }
 
     @GetMapping("/api/0.0.1/{id}")
-    public ResponseEntity<Story> getStoryByName(@PathVariable("id") long id) {
+    public ResponseEntity<Story> getStoryById(@PathVariable("id") long id) {
         Optional<Story> fromService = service.getStoryById(id);
 
         if (!fromService.isPresent()) {

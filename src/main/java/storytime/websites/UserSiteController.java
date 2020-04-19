@@ -21,6 +21,8 @@ import storytime.parent.ParentService;
 import javax.validation.Valid;
 import java.util.Optional;
 
+// todo move all services into rest-controllers which are called by this
+
 @Controller
 @EnableAutoConfiguration
 public class UserSiteController {
@@ -180,6 +182,7 @@ public class UserSiteController {
         return "user/child-prefs";
     }
 
+    // todo fix update case
     @PostMapping("/parent/{pid}/child/{cid}/prefs")
     public String parent__pid__child__cid__prefs(Model model,
                                                  @PathVariable("pid") long parentId,
@@ -192,6 +195,8 @@ public class UserSiteController {
         // story prefs owner is child
         childService.getChildById(childId).ifPresent(c -> {
             log.info("child found: {}", c);
+
+            // see if a story-prefs already exists
             storyPreferences.setOwner(c);
         });
 
@@ -208,4 +213,5 @@ public class UserSiteController {
 
         return parent__id(model, parentId);
     }
+
 }

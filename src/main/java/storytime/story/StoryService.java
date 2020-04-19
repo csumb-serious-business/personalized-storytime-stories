@@ -29,7 +29,17 @@ public class StoryService {
     }
 
     public void populateStories() {
+        // todo
 
+    }
+
+    public boolean persist(Story story) {
+        try {
+            repo.save(story);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
 }
