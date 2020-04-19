@@ -52,4 +52,9 @@ public class Story {
     public void setContent(String content) {
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{" + this.id + "}";
+    }
 }
