@@ -97,12 +97,11 @@ ul.nav li.active a {
     font-family: 'Lucida Sans', 'Lucida Sans Regular',
     'Lucida Grande', 'Lucida Sans Unicode', Geneva,
     Verdana, sans-serif;
-=======
+	}
+
 #admin-link{
 	padding-left: 20px;
->>>>>>> Stashed changes
 }
-
 
 #password, #username {
     padding-block: 10%;

@@ -1,0 +1,16 @@
+<!-- story-create -->
+
+<!-- including a list of stories with options to modify them	including a list of stories with options to modify them
+needs a button to create a new story 	needs a button to create a new story -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}">
+
+<title>Admin Panel: View Story</title>
+<div id="main">
+	<h1>Admin Panel: View Story</h1>
+		ID:<span th:inline="text"> [[${story.id}]] </span> <br>
+		Content: <span th:inline="text"> [[${story.content}]] </span> <br>
+		Title:<span th:inline="text"> [[${story.title}]] </span> <br>
+		<a class="btn btn-primary" href="/admin/stories" role="button">Admin Home</a>
+</div>
+</html>	
