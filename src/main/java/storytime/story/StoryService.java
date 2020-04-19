@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import storytime.child.Child;
+
 import java.util.Optional;
 
 @Service
@@ -42,4 +44,12 @@ public class StoryService {
     return true;
   }
 
+    public boolean persist(Story story) {
+        try {
+            repo.save(story);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 }
