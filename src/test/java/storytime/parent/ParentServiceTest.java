@@ -62,17 +62,17 @@ class ParentServiceTest {
 
     @Test
     void persist__valid_parent() {
-        assertTrue(subject.persist(validParent));
+        assertTrue(subject.create(validParent));
     }
 
     @Test
     void persist__invalid_parent() {
-        assertFalse(subject.persist(emptyParent));
+        assertFalse(subject.create(emptyParent));
     }
 
     @Test
     void getParentById__found() {
-        Optional<Parent> actual = subject.getParentById(0L);
+        Optional<Parent> actual = subject.read(0L);
         Optional<Parent> expect = Optional.of(validParent);
 
         assertThat(actual).isEqualTo(expect);
@@ -80,32 +80,32 @@ class ParentServiceTest {
 
     @Test
     void getParentById__not_found() {
-        Optional<Parent> actual = subject.getParentById(-1L);
+        Optional<Parent> actual = subject.read(-1L);
         Optional<Parent> expect = Optional.empty();
 
         assertThat(actual).isEqualTo(expect);
     }
 
     @Test
-    void getParentByUsername__found_one() {
-        Optional<Parent> actual = subject.getParentByUsername("Parent");
-        Optional<Parent> expect = Optional.of(validParent);
+    void getIdForUsername__found_one() {
+        Optional<Long> actual = subject.getIdForUsername("Parent");
+        Optional<Long> expect = Optional.of(validParent.getId());
 
         assertThat(actual).isEqualTo(expect);
     }
 
     @Test
-    void getParentByUsername__found_none() {
-        Optional<Parent> actual = subject.getParentByUsername("NOBODY");
-        Optional<Parent> expect = Optional.empty();
+    void getIdForUsername__found_none() {
+        Optional<Long> actual = subject.getIdForUsername("NOBODY");
+        Optional<Long> expect = Optional.empty();
 
         assertThat(actual).isEqualTo(expect);
     }
 
     @Test
-    void getParentByUsername__found_two() {
-        Optional<Parent> actual = subject.getParentByUsername("Dupe Parent");
-        Optional<Parent> expect = Optional.of(dupeNameParentA);
+    void getIdForUsername__found_two() {
+        Optional<Long> actual = subject.getIdForUsername("Dupe Parent");
+        Optional<Long> expect = Optional.of(dupeNameParentA.getId());
 
         assertThat(actual).isEqualTo(expect);
     }

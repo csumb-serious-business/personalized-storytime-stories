@@ -49,44 +49,16 @@ class StoryPreferencesServiceTest {
 
         given(storyPreferencesRepository.save(validStoryPreferences)).willReturn(validStoryPreferences);
         given(storyPreferencesRepository.save(emptyStoryPreferences)).willThrow(new IllegalArgumentException());
-
-
     }
 
     @AfterEach
     void tearDown() {
     }
 
-    @Test
-    void persist__valid_story_prefs() {
-        assertTrue(subject.persist(validStoryPreferences));
-    }
-
-    @Test
-    void persist__invalid_story_prefs() {
-        assertFalse(subject.persist(emptyStoryPreferences));
-    }
-
-
-    @Test
-    void getStoryPreferencesById__found() {
-        Optional<StoryPreferences> actual = subject.getStoryPreferencesById(1L);
-        Optional<StoryPreferences> expect = Optional.of(validStoryPreferences);
-
-        assertThat(actual).isEqualTo(expect);
-    }
-
-    @Test
-    void getStoryPreferencesById__not_found() {
-        Optional<StoryPreferences> actual = subject.getStoryPreferencesById(-1L);
-        Optional<StoryPreferences> expect = Optional.empty();
-
-        assertThat(actual).isEqualTo(expect);
-    }
 
     @Test
     void getStoryPreferencesByOwner__found() {
-        Optional<StoryPreferences> actual = subject.getStoryPreferencesByOwner(child);
+        Optional<StoryPreferences> actual = subject.getStoryPreferencesForOwner(child);
         Optional<StoryPreferences> expect = Optional.of(validStoryPreferences);
 
         assertThat(actual).isEqualTo(expect);
@@ -96,10 +68,29 @@ class StoryPreferencesServiceTest {
     void getStoryPreferencesByOwner__not_found() {
         Child nonexistantChild = new Child();
         nonexistantChild.setId(-1L);
-        Optional<StoryPreferences> actual = subject.getStoryPreferencesByOwner(nonexistantChild);
+        Optional<StoryPreferences> actual = subject.getStoryPreferencesForOwner(nonexistantChild);
         Optional<StoryPreferences> expect = Optional.empty();
 
         assertThat(actual).isEqualTo(expect);
 
     }
+
+    @Test
+    void createOrUpdate__create() {
+        assertTrue(subject.createOrUpdate(validStoryPreferences));
+    }
+
+    @Test
+    void createOrUpdate__update() {
+        StoryPreferences changed = validStoryPreferences;
+        changed.setId(999L);
+        assertTrue(subject.createOrUpdate(changed));
+    }
+
+    @Test
+    void createOrUpdate__fail() {
+        assertFalse(subject.createOrUpdate(emptyStoryPreferences));
+    }
+
+
 }

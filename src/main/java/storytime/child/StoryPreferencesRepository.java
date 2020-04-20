@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface StoryPreferencesRepository extends JpaRepository<StoryPreferences, Long> {
-    Optional<StoryPreferences> findByOwnerId(long ownerId);
+  Optional<StoryPreferences> findByOwnerId(long ownerId);
 }

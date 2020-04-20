@@ -12,25 +12,25 @@ import java.util.Optional;
 
 @RestController
 public class StoryRestController {
-    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
+  private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    private final StoryService service;
+  private final StoryService service;
 
-    public StoryRestController(StoryService storyService) {
-        this.service = storyService;
+  public StoryRestController(StoryService storyService) {
+    this.service = storyService;
+  }
+
+  @GetMapping("/api/0.0.1/{id}")
+  public ResponseEntity<Story> getStoryById(@PathVariable("id") long id) {
+    Optional<Story> fromService = service.getStoryById(id);
+
+    if (!fromService.isPresent()) {
+      log.info("story {} not found", id);
+      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    } else {
+      log.info("story {} found", id);
+      return new ResponseEntity<>(fromService.get(), HttpStatus.OK);
     }
-
-    @GetMapping("/api/0.0.1/{id}")
-    public ResponseEntity<Story> getStoryById(@PathVariable("id") long id) {
-        Optional<Story> fromService = service.getStoryById(id);
-
-        if (!fromService.isPresent()) {
-            log.info("story {} not found", id);
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        } else {
-            log.info("story {} found", id);
-            return new ResponseEntity<>(fromService.get(), HttpStatus.OK);
-        }
-    }
+  }
 
 }
