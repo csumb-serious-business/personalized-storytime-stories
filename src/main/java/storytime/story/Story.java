@@ -1,11 +1,15 @@
 package storytime.story;
 
+import storytime.common.HasId;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "STORY")
-public class Story {
+public class Story implements HasId {
   @Id
   @GeneratedValue
   private long id;
@@ -13,10 +17,12 @@ public class Story {
   @Lob
   @Column(name = "TITLE")
   @NotNull
+  @Size(min = 3)
   private String title;
 
   @Lob
   @Column(name = "CONTENT")
+  @Size(min = 3)
   private String content;
 
   public Story(long id, String title, String content) {
@@ -29,7 +35,7 @@ public class Story {
 
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 

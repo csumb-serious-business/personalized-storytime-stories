@@ -1,0 +1,37 @@
+<!-- including a list of stories with options to modify them	including a list of stories with options to modify them
+needs a button to create a new story 	needs a button to create a new story -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}">
+
+<title>Admin Panel: Edit a Story.</title>
+<div id="main">
+    <h1>Admin Panel: Edit A Story.</h1>
+    <form th:action="@{/admin/story/{id}/edit(id=${story.id})}" th:object="${story}"
+          method="post">
+        <fieldset class="form-section">
+
+            <div class="form-item">
+                <label for="content">Story Content:</label>
+                <input type="text" id="content" th:field="*{content}"/>
+                <span th:if="${#fields.hasErrors('content')}"
+                      th:errors="*{content}"></span><br/>
+            </div>
+
+            <div class="form-item">
+                <label for="title">Story Title:</label>
+                <input type="text" id="title" th:field="*{title}"/>
+                <span th:if="${#fields.hasErrors('title')}"
+                      th:errors="*{title}">
+				</span> <br/>
+            </div>
+            <br/>
+            <br/>
+
+            <div class="form-item">
+                <input type="submit" value="Submit"/>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
+</html>
