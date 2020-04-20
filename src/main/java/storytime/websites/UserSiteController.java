@@ -116,12 +116,15 @@ public class UserSiteController {
     return "user/parent-home";
   }
 
+  // todo
   @GetMapping("/parent/{id}/edit")
   public String parent__id__edit(Model model, @PathVariable("id") long id) {
     log.info("GET /parent/edit/{}", id);
     model.addAttribute("id", id);
     return "user/parent-edit";
   }
+
+  // todo post mapping parent/id/edit
 
   /*--- Child & Child Prefs -----------------------------------------------*/
   @GetMapping("/parent/{id}/new-child")

@@ -87,8 +87,6 @@ public class AdminSiteController {
 
     storyService.update(story);
 
-
-    storyService.create(story);
     return "admin/story-all-show";
   }
 

@@ -6,7 +6,7 @@ needs a button to create a new story 	needs a button to create a new story -->
 <title>Admin Panel: Edit a Story.</title>
 <div id="main">
     <h1>Admin Panel: Edit A Story.</h1>
-    <form th:action="@{/admin/story/new-story}" th:object="${story}"
+    <form th:action="@{/admin/story/{id}/edit(id=${story.id})}" th:object="${story}"
           method="post">
         <fieldset class="form-section">
 
