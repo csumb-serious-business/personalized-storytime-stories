@@ -8,8 +8,9 @@
         <div>
             <span><strong>[[${child.name}]]</strong></span>
             <!-- edit prefs -->
-            <a th:href="@{/parent/{pid}/child/{cid}/prefs(pid=${parent.id}, cid=${child.id})}"><img th:src="@{~/img/edit.svg}"
-                                                                                              class="button btn-icon"></a>
+            <a th:href="@{/parent/{pid}/child/{cid}/prefs(pid=${parent.id}, cid=${child.id})}">
+                <img th:src="@{~/img/edit.svg}" class="button btn-icon">
+            </a>
         </div>
         <div>
             <!-- favorite story cards (to read) --><!-- show hidden --><!-- only favorites-->

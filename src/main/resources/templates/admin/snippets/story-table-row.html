@@ -1,0 +1,31 @@
+<tr class="story-table-row"
+    xmlns:th="http://www.thymeleaf.org"
+    th:fragment="layout(story)"
+>
+
+    <!-- todo from metrics -->
+    <td class="story-card-favorite-count">0</td>
+
+    <!-- todo from metrics -->
+    <td class="story-card-hidden-count">0</td>
+
+    <td class="story-card-title">
+        <span class="float-left">
+        <a th:href="@{/admin/story/{id}(id=${story.id})}">[[${story.title}]]</a>
+            <!-- edit story -->
+        </span>
+        <span class="float-right">
+            <a th:href="@{/admin/story/{id}/edit(id=${story.id})}" class="story-card-edit-btn">
+                <img th:src="@{~/img/edit.svg}" class="button btn-icon">
+            </a>
+            <a class="story-card-delete-btn" th:href="@{/admin/story/{id}/delete(id=${story.id})}">
+            <img th:src="@{~/img/trash.svg}" class="button btn-icon">
+            </a>
+        </span>
+    </td>
+
+    <!-- todo estimate from content length -->
+    <td class="story-card-time">0 min</td>
+
+
+</tr>

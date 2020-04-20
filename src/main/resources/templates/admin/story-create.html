@@ -11,24 +11,25 @@ needs a button to create a new story 	needs a button to create a new story -->
         <fieldset class="form-section">
 
             <div class="form-item">
-                <label for="content">Story Content:</label>
-                <input type="text" id="content" th:field="*{content}"/>
-                <span th:if="${#fields.hasErrors('content')}"
-                      th:errors="*{content}"></span><br/>
-            </div>
-
-            <div class="form-item">
                 <label for="title">Story Title:</label>
                 <input type="text" id="title" th:field="*{title}"/>
                 <span th:if="${#fields.hasErrors('title')}"
                       th:errors="*{title}">
 				</span> <br/>
             </div>
+
             <br/>
+            <div class="form-item">
+                <label for="content">Story Content:</label>
+                <textarea type="text" id="content" th:field="*{content}"></textarea>
+                <span th:if="${#fields.hasErrors('content')}"
+                      th:errors="*{content}"></span><br/>
+            </div>
+
             <br/>
 
             <div class="form-item">
-                <input type="submit" value="Submit"/>
+                <input type="submit" value="Submit" class="btn btn-primary"/>
             </div>
 
         </fieldset>

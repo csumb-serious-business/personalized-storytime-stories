@@ -16,6 +16,7 @@ import storytime.story.Story;
 import storytime.story.StoryService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @EnableAutoConfiguration
@@ -30,6 +31,11 @@ public class AdminSiteController {
     log.info("GET /admin/stories");
 
     // get all stories here to populate in the view
+    // todo add pagination
+
+    List<Story> stories = storyService.readAll();
+    log.info("fetched {} stories", stories.size());
+    model.addAttribute("stories", stories);
 
     return "admin/story-all-show";
   }
@@ -52,7 +58,7 @@ public class AdminSiteController {
     log.info("POST /admin/story/new-story -- story: {}", story);
     storyService.create(story);
 
-    return "admin/story-all-show";
+    return "redirect:/admin/stories";
   }
 
   @GetMapping("/admin/story/{id}")
@@ -62,8 +68,6 @@ public class AdminSiteController {
 
     return "admin/story-show";
   }
-
-
 
   @GetMapping("/admin/story/{id}/edit")
   public String admin__story__id__edit(ModelMap model, @PathVariable("id") long id) {
@@ -87,7 +91,19 @@ public class AdminSiteController {
 
     storyService.update(story);
 
-    return "admin/story-all-show";
+    return "redirect:/admin/stories";
+  }
+
+  // todo should be ajax
+  @GetMapping("/admin/story/{id}/delete")
+  public String admin__story__id__delete(Model model, @PathVariable("id") long id,
+      @Valid @ModelAttribute("story") Story story, BindingResult result) {
+
+    log.info("GET /admin/story/{id}/delete -- story {}", story);
+
+    storyService.delete(story);
+
+    return "redirect:/admin/stories";
   }
 
 }
