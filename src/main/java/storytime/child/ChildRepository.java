@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface ChildRepository extends JpaRepository<Child, Long> {
-    List<Child> findByName(String name);
+  List<Child> findByName(String name);
 }

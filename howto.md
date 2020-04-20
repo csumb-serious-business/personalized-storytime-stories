@@ -1,5 +1,8 @@
 
 
+## run this before creating PR commit
+`mvn clean validate formatter:format compile test jacoco:report`
+
 ## make CC attributions
 https://wiki.creativecommons.org/wiki/best_practices_for_attribution
 

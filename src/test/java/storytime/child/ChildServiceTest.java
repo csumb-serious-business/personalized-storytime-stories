@@ -2,7 +2,6 @@ package storytime.child;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,9 +10,6 @@ import storytime.parent.Parent;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
@@ -50,32 +46,6 @@ class ChildServiceTest {
 
     @AfterEach
     void tearDown() {
-    }
-
-    @Test
-    void persist__valid_child() {
-        assertTrue(subject.persist(validChild));
-    }
-
-    @Test
-    void persist__invalid_child() {
-        assertFalse(subject.persist(emptyChild));
-    }
-
-    @Test
-    void getChildById__found() {
-        Optional<Child> actual = subject.getChildById(1L);
-        Optional<Child> expect = Optional.of(validChild);
-
-        assertThat(actual).isEqualTo(expect);
-    }
-
-    @Test
-    void getChildById__not_found() {
-        Optional<Child> actual = subject.getChildById(-1L);
-        Optional<Child> expect = Optional.empty();
-
-        assertThat(actual).isEqualTo(expect);
     }
 
 }

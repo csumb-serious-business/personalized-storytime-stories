@@ -26,192 +26,173 @@ import java.util.Optional;
 @Controller
 @EnableAutoConfiguration
 public class UserSiteController {
-    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
+  private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    @Autowired
-    ParentService parentService;
+  @Autowired
+  ParentService parentService;
 
-    @Autowired
-    ChildService childService;
+  @Autowired
+  ChildService childService;
 
-    @Autowired
-    StoryPreferencesService storyPreferencesService;
+  @Autowired
+  StoryPreferencesService storyPreferencesService;
 
-    @GetMapping("/")
-    public String index() {
-        log.info("GET / [website root]");
-        return "user/_index";
+  @GetMapping("/")
+  public String index() {
+    log.info("GET / [website root]");
+    return "user/_index";
+  }
+
+  /*--- Parent Account ----------------------------------------------------*/
+  @GetMapping("/sign-up")
+  public String sign_up(Model model) {
+    log.info("GET /sign-up");
+    model.addAttribute("parent", new Parent());
+    return "user/parent-create";
+  }
+
+  @PostMapping("/sign-up")
+  public String sign_up(@Valid @ModelAttribute("parent") Parent parent, BindingResult result) {
+
+    if (result.hasErrors()) {
+      return "user/parent-create";
     }
 
-    /*--- Parent Account ----------------------------------------------------*/
-    @GetMapping("/sign-up")
-    public String sign_up(Model model) {
-        log.info("GET /sign-up");
-        model.addAttribute("parent", new Parent());
-        return "user/parent-create";
+    log.info("POST /sign-up -- parent");
+
+    // persist will only fail on dupe username?
+    if (!parentService.create(parent)) {
+      result.rejectValue("username", "error.user", parent.getUsername() + " is already taken.");
+      return "user/parent-create";
     }
 
-    @PostMapping("/sign-up")
-    public String sign_up(@Valid @ModelAttribute("parent") Parent parent, BindingResult result) {
+    String url = "/parent/" + parent.getId();
+    log.info("redirecting to: {}", url);
 
-        if (result.hasErrors()) {
-            return "user/parent-create";
-        }
+    return "redirect:" + url;
+  }
 
-        log.info("POST /sign-up -- parent");
+  @GetMapping("/sign-in")
+  public String sign_in(Model model) {
+    log.info("GET /sign-in");
+    model.addAttribute("parent", new Parent());
+    return "user/parent-sign-in";
+  }
 
-        // persist will only fail on dupe username?
-        if (!parentService.persist(parent)) {
-            result.rejectValue("username", "error.user", parent.getUsername() + " is already taken.");
-            return "user/parent-create";
-        }
+  @PostMapping("/sign-in")
+  public String sign_in(@Valid @ModelAttribute("parent") Parent parent, BindingResult result) {
 
-        String url = "/parent/" + parent.getId();
-        log.info("redirecting to: {}", url);
-
-        return "redirect:" + url;
+    // check for basic validation fail
+    if (result.hasErrors()) {
+      return "user/parent-sign-in";
     }
 
-    @GetMapping("/sign-in")
-    public String sign_in(Model model) {
-        log.info("GET /sign-in");
-        model.addAttribute("parent", new Parent());
-        return "user/parent-sign-in";
+    log.info("POST /sign-in -- parent: {}", parent);
+
+    // attempt to login
+    Optional<String> attemptResult = parentService.loginAttempt(parent);
+    if (attemptResult.isPresent()) {
+      result.reject("sign_in", attemptResult.get());
+      return "user/parent-sign-in";
     }
 
-    @PostMapping("/sign-in")
-    public String sign_in(@Valid @ModelAttribute("parent") Parent parent, BindingResult result) {
+    // lookup the actual parent id for path
+    String url = parentService.getIdForUsername(parent.getUsername()).map(i -> "/parent/" + i)
+        .orElse("/parent");
 
-        // check for basic validation fail
-        if (result.hasErrors()) {
-            return "user/parent-sign-in";
-        }
+    log.info("redirecting to: {}", url);
 
-        // lookup the actual username/passphrase to auth
-        Optional<Parent> actual = parentService.getParentByUsername(parent.getUsername());
+    return "redirect:" + url;
+  }
 
-        // username doesn't exist or passphrase doesn't match
-        if (!actual.isPresent()) {
-            log.info("{} not found", parent);
-            result.reject("sign_in", "Either the username doesn't exist or passphrase is incorrect");
-            return "user/parent-sign-in";
-        } else if (!actual.get().getPassphrase().equals(parent.getPassphrase())) {
-            log.info("{} != {}", parent.getPassphrase(), actual.get().getPassphrase());
-            result.reject("sign_in", "Either the username doesn't exist or passphrase is incorrect");
-            return "user/parent-sign-in";
-        }
+  @GetMapping("/parent/{id}")
+  public String parent__id(Model model, @PathVariable("id") long id) {
+    log.info("GET /parent/{}", id);
 
-        log.info("POST /sign-in -- parent: {}", parent);
-        String url = "/parent/" + actual.get().getId();
-        log.info("redirecting to: {}", url);
+    // todo should 404 if parent not found
+    parentService.read(id).ifPresent(model::addAttribute);
 
-        return "redirect:" + url;
+    return "user/parent-home";
+  }
+
+  @GetMapping("/parent/{id}/edit")
+  public String parent__id__edit(Model model, @PathVariable("id") long id) {
+    log.info("GET /parent/edit/{}", id);
+    model.addAttribute("id", id);
+    return "user/parent-edit";
+  }
+
+  /*--- Child & Child Prefs -----------------------------------------------*/
+  @GetMapping("/parent/{id}/new-child")
+  public String parent__id__new_child(Model model, @PathVariable("id") long id) {
+    log.info("GET /parent/{}/new-child", id);
+
+    // todo should 404 if parent not found
+    parentService.read(id).ifPresent(model::addAttribute);
+    model.addAttribute("child", new Child());
+
+    return "user/child-create";
+  }
+
+  @PostMapping("/parent/{id}/new-child")
+  public String parent__id__new_child(Model model, @PathVariable("id") long id,
+      @Valid @ModelAttribute("child") Child child, BindingResult result) {
+
+    parentService.read(id).ifPresent(child::setParent);
+
+    if (result.hasErrors()) {
+      log.info("result: {}", result);
+      return "user/child-create";
     }
 
-    @GetMapping("/parent/{id}")
-    public String parent__id(Model model, @PathVariable("id") long id) {
-        log.info("GET /parent/{}", id);
+    log.info("POST /parent/{}/new-child -- child {}", id, child);
 
-        // todo should 404 if parent not found
-        parentService.getParentById(id).ifPresent(model::addAttribute);
+    childService.create(child);
 
-        return "user/parent-home";
+    return parent__id(model, id);
+  }
+
+  @GetMapping("/parent/{pid}/child/{cid}/prefs")
+  public String parent__pid__child__cid__prefs(Model model, @PathVariable("pid") long parentId,
+      @PathVariable("cid") long childId) {
+    log.info("GET /parent/{}/child/{}/prefs", parentId, childId);
+
+    // todo should 404 if parent or child not found
+    parentService.read(parentId).ifPresent(model::addAttribute);
+    childService.read(childId).ifPresent(c -> {
+
+      // if child exists add it
+      model.addAttribute(c);
+
+      // if child's prefs exist, add them, otherwise add a new one
+      storyPreferencesService.getStoryPreferencesForOwner(c).ifPresentOrElse(model::addAttribute,
+          () -> model.addAttribute(new StoryPreferences()));
+    });
+
+    return "user/child-prefs";
+  }
+
+  // todo fix update case
+  @PostMapping("/parent/{pid}/child/{cid}/prefs")
+  public String parent__pid__child__cid__prefs(Model model, @PathVariable("pid") long parentId,
+      @PathVariable("cid") long childId, @ModelAttribute Parent parent, @ModelAttribute Child child,
+      @Valid @ModelAttribute StoryPreferences storyPreferences, BindingResult result) {
+
+    if (result.hasErrors()) {
+      log.info("result: {}", result);
+      parentService.read(parentId).ifPresent(model::addAttribute);
+      childService.read(childId).ifPresent(model::addAttribute);
+
+      return "user/child-prefs";
     }
 
-    @GetMapping("/parent/{id}/edit")
-    public String parent__id__edit(Model model, @PathVariable("id") long id) {
-        log.info("GET /parent/edit/{}", id);
-        model.addAttribute("id", id);
-        return "user/parent-edit";
-    }
+    log.info("POST /parent/{}/child/{}/prefs", parentId, childId);
 
-    /*--- Child & Child Prefs -----------------------------------------------*/
-    @GetMapping("/parent/{id}/new-child")
-    public String parent__id__new_child(Model model, @PathVariable("id") long id) {
-        log.info("GET /parent/{}/new-child", id);
+    // if we got here, child should always exist
+    childService.read(childId).ifPresent(storyPreferences::setOwner);
+    storyPreferencesService.createOrUpdate(storyPreferences);
 
-        // todo should 404 if parent not found
-        parentService.getParentById(id).ifPresent(model::addAttribute);
-        model.addAttribute("child", new Child());
-
-        return "user/child-create";
-    }
-
-    @PostMapping("/parent/{id}/new-child")
-    public String parent__id__new_child(Model model,
-                                        @PathVariable("id") long id,
-                                        @Valid @ModelAttribute("child") Child child,
-                                        BindingResult result) {
-
-        parentService.getParentById(id).ifPresent(child::setParent);
-
-        if (result.hasErrors()) {
-            log.info("result: {}", result);
-            return "user/child-create";
-        }
-
-        log.info("POST /parent/{}/new-child -- child {}", id, child);
-
-        childService.persist(child);
-
-        return parent__id(model, id);
-    }
-
-    @GetMapping("/parent/{pid}/child/{cid}/prefs")
-    public String parent__pid__child__cid__prefs(Model model,
-                                                 @PathVariable("pid") long parentId,
-                                                 @PathVariable("cid") long childId) {
-        log.info("GET /parent/{}/child/{}/prefs", parentId, childId);
-
-        // todo should 404 if parent or child not found
-        parentService.getParentById(parentId).ifPresent(model::addAttribute);
-        childService.getChildById(childId).ifPresent(c -> {
-
-            // if child exists add it
-            model.addAttribute(c);
-
-            // if child's prefs exist, add them, otherwise add a new one
-            storyPreferencesService.getStoryPreferencesByOwner(c)
-                    .ifPresentOrElse(
-                            model::addAttribute,
-                            () -> model.addAttribute(new StoryPreferences())
-                    );
-        });
-
-
-        return "user/child-prefs";
-    }
-
-    // todo fix update case
-    @PostMapping("/parent/{pid}/child/{cid}/prefs")
-    public String parent__pid__child__cid__prefs(Model model,
-                                                 @PathVariable("pid") long parentId,
-                                                 @PathVariable("cid") long childId,
-                                                 @ModelAttribute Parent parent,
-                                                 @ModelAttribute Child child,
-                                                 @Valid @ModelAttribute StoryPreferences storyPreferences,
-                                                 BindingResult result) {
-
-        // story prefs owner is child
-        childService.getChildById(childId).ifPresent(c -> {
-            log.info("child found: {}", c);
-
-            // see if a story-prefs already exists
-            storyPreferences.setOwner(c);
-        });
-
-        if (result.hasErrors()) {
-            log.info("result: {}", result);
-
-            // todo resets path to 0/0 after validation failure
-            return "user/child-prefs";
-        }
-
-        log.info("POST /parent/{}/child/{}/prefs", parentId, childId);
-
-        storyPreferencesService.persist(storyPreferences);
-
-        return parent__id(model, parentId);
-    }
+    return parent__id(model, parentId);
+  }
 
 }
