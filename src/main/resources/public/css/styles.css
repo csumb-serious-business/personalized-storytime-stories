@@ -56,6 +56,11 @@ form {
     margin-bottom: .5em;
 }
 
+.story-card {
+    display:inline;
+
+}
+
 /* === nav ================================================== */
 .navbar-inverse, ul.nav li a, ul.nav li a:visited,
 ul.nav li a:hover, ul.nav li a:active,
@@ -83,7 +88,6 @@ ul.nav li.active a {
     flex-direction: row;
 }
 
-<<<<<<< Updated upstream
 #navHome, #navSignIn {
     padding: 1%;
     background-color: white;

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import storytime.common.CrudService;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class StoryService extends CrudService<Story, StoryRepository> {
@@ -14,6 +14,10 @@ public class StoryService extends CrudService<Story, StoryRepository> {
 
   public StoryService(StoryRepository storyRepository) {
     super(storyRepository);
+  }
+
+  public List<Story> readAll() {
+    return repository.findAll();
   }
 
   public void populateStories() {

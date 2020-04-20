@@ -21,9 +21,6 @@ import storytime.parent.ParentService;
 import javax.validation.Valid;
 import java.util.Optional;
 
-// todo move all services into rest-controllers which are called by this
-
-
 @Controller
 @EnableAutoConfiguration
 public class UserSiteController {
