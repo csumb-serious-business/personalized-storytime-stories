@@ -22,7 +22,7 @@ public class StoryRestController {
 
   @GetMapping("/api/0.0.1/{id}")
   public ResponseEntity<Story> getStoryById(@PathVariable("id") long id) {
-    Optional<Story> fromService = service.getStoryById(id);
+    Optional<Story> fromService = service.read(id);
 
     if (!fromService.isPresent()) {
       log.info("story {} not found", id);

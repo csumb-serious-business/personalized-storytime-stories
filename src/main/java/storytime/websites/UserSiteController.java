@@ -23,6 +23,7 @@ import java.util.Optional;
 
 // todo move all services into rest-controllers which are called by this
 
+
 @Controller
 @EnableAutoConfiguration
 public class UserSiteController {
@@ -185,11 +186,11 @@ public class UserSiteController {
 
       return "user/child-prefs";
     }
-
-    log.info("POST /parent/{}/child/{}/prefs", parentId, childId);
+    log.info("POST /parent/{}/child/{}/prefs -- prefs: {}", parentId, childId, storyPreferences);
 
     // if we got here, child should always exist
     childService.read(childId).ifPresent(storyPreferences::setOwner);
+
     storyPreferencesService.createOrUpdate(storyPreferences);
 
     return parent__id(model, parentId);

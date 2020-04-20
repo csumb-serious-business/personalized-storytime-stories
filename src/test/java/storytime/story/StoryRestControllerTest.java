@@ -41,8 +41,8 @@ class StoryRestControllerTest {
         subject = new StoryRestController(storyService);
 
         // mock story-service
-        given(storyService.getStoryById(1L)).willReturn(Optional.of(story));
-        given(storyService.getStoryById(-1L)).willReturn(Optional.empty());
+        given(storyService.read(1L)).willReturn(Optional.of(story));
+        given(storyService.read(-1L)).willReturn(Optional.empty());
     }
 
     @AfterEach

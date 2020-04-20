@@ -46,18 +46,8 @@ class StoryServiceTest {
     }
 
     @Test
-    void persist__valid_story() {
-        assertTrue(subject.persist(validStory));
-    }
-
-    @Test
-    void persist__invalid_story() {
-        assertFalse(subject.persist(emptyStory));
-    }
-
-    @Test
     void getChildById__found() {
-        Optional<Story> actual = subject.getStoryById(1L);
+        Optional<Story> actual = subject.read(1L);
         Optional<Story> expect = Optional.of(validStory);
 
         assertThat(actual).isEqualTo(expect);
@@ -65,7 +55,7 @@ class StoryServiceTest {
 
     @Test
     void getChildById__not_found() {
-        Optional<Story> actual = subject.getStoryById(-1L);
+        Optional<Story> actual = subject.read(-1L);
         Optional<Story> expect = Optional.empty();
 
         assertThat(actual).isEqualTo(expect);
