@@ -17,8 +17,12 @@ import storytime.child.StoryPreferences;
 import storytime.child.StoryPreferencesService;
 import storytime.parent.Parent;
 import storytime.parent.ParentService;
+import storytime.story.FullStoryService;
+import storytime.story.Story;
+import storytime.story.StoryService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -34,6 +38,12 @@ public class UserSiteController {
 
   @Autowired
   StoryPreferencesService storyPreferencesService;
+
+  @Autowired
+  StoryService storyService;
+
+  @Autowired
+  FullStoryService fullStoryService;
 
   @GetMapping("/")
   public String index() {
@@ -195,5 +205,40 @@ public class UserSiteController {
 
     return parent__id(model, parentId);
   }
+
+  /*--- Stories -----------------------------------------------------------*/
+  @GetMapping("/parent/{pid}/stories")
+  public String parent__pid__stories(Model model, @PathVariable("pid") long parentId) {
+    log.info("GET /parent/{}/stories", parentId);
+
+    // get all stories here to populate in the view
+    // todo instead of showing all stories, show recommended stories
+
+    List<Story> stories = storyService.readAll();
+    parentService.read(parentId).ifPresent(model::addAttribute);
+
+    model.addAttribute("stories", stories);
+
+    return "user/parent-stories";
+  }
+
+  @GetMapping("/parent/{pid}/story/{sid}")
+  public String parent__pid__story(Model model, @PathVariable("pid") long parentId,
+      @PathVariable("sid") long storyId) {
+    log.info("GET /parent/{}/story/{}", parentId, storyId);
+
+    parentService.read(parentId).ifPresent(model::addAttribute);
+    storyService.read(storyId).ifPresent(model::addAttribute);
+    fullStoryService.getDefault(storyId).ifPresent(s -> model.addAttribute("fullstory", s));
+
+    return "user/parent-story-read";
+  }
+
+  // todo
+  @GetMapping("/parent/{pid}/child/{cid}/read/{sid}")
+  public String parent__pid__child__cid__read__sid() {
+    return "";
+  }
+
 
 }

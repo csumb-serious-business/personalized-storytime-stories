@@ -22,9 +22,13 @@
 <template th:replace="common/snippets/nav"></template>
 <template th:replace="common/snippets/header"></template>
 
-<template th:replace="${main}"></template>
+<div class="main">
+    <template th:replace="${main}"></template>
+</div>
+<div class="footer">
+    <template th:replace="common/snippets/footer"></template>
+</div>
 
-<template th:replace="common/snippets/footer"></template>
 
 <template th:replace="${scripts}"></template>
 </body>

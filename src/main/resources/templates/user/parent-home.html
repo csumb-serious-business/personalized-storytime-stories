@@ -7,19 +7,25 @@
 <div id="main">
     <h1 th:inline="text">Welcome, [[${parent.username}]]</h1>
 
+    <!-- browse stories -->
+    <div><a th:href="@{/parent/{id}/stories(id=${parent.id})}"
+            class="btn btn-primary">Browse Stories
+    </a></div>
+
     <!-- list of children -->
     <div th:if="${!parent.children.isEmpty()}">
         <span>Children</span>
         <div th:each="child : ${parent.children}">
-            <template th:replace="~{user/snippets/child-details :: layout(${parent}, ${child})}"></template>
+            <template
+                    th:replace="~{user/snippets/child-details :: layout(${parent}, ${child})}"></template>
         </div>
     </div>
 
     <!-- add child -->
-    <div><a th:href="@{/parent/{id}/new-child(id=${parent.id})}">
-        <button>add child</button>
-    </a>
-    </div>
+    <div><a th:href="@{/parent/{id}/new-child(id=${parent.id})}"
+            class="btn btn-primary">
+        add child
+    </a></div>
 
 
 </div>

@@ -1,5 +1,27 @@
 /** this will contain site-wide css */
 
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
+    background: black;
+    text-align: center;
+    font-size: 0.8em;
+    color: white;
+
+}
+
 h1 {
     font-size: 2em;
 }
@@ -57,7 +79,7 @@ form {
 }
 
 .story-card {
-    display:inline;
+    display: inline;
 
 }
 
@@ -101,10 +123,10 @@ ul.nav li.active a {
     font-family: 'Lucida Sans', 'Lucida Sans Regular',
     'Lucida Grande', 'Lucida Sans Unicode', Geneva,
     Verdana, sans-serif;
-	}
+}
 
-#admin-link{
-	padding-left: 20px;
+#admin-link {
+    padding-left: 20px;
 }
 
 #password, #username {
@@ -112,15 +134,6 @@ ul.nav li.active a {
     margin-block: 10%;
 }
 
-#footer-id {
-    background: black;
-    text-align: center;
-    font-size: 0.8em;
-    color: white;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
 
 .jumbotron {
     background-color: #f4511e;
@@ -149,6 +162,11 @@ ul.nav li.active a {
     border-width: medium;
     border-color: #f4511e;
     padding: 10px;
+}
+
+.full-story-text {
+    white-space: pre-wrap;
+    text-align: left;
 }
 
 .signin-section {

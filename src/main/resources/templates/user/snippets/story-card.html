@@ -1,15 +1,19 @@
-<div class="story-card">
+<div class="story-card"
+     xmlns:th="http://www.thymeleaf.org"
+     th:fragment="layout(parent, story)"
+>
     <!-- todo show enabled/disabled star via css -->
-    <div class="story-card-favorite-toggle">&#x2B50;</div>
+    <span class="story-card-favorite-toggle">&#x2B50;</span>
 
-    <div class="story-card-title">title</div>
+    <span class="story-card-title">[[${story.title}]]</span>
 
-    <div class="story-card-details-btn">details</div>
+    <span class="story-card-demo-btn">
+        <a th:href="@{/parent/{pid}/story/{sid}(sid=${story.id}, pid=${parent.id})}">demo</a>
+    </span>
 
-    <div class="story-card-time">time</div>
-
-    <div class="story-card-read-btn">read now</div>
+    <span class="story-card-time">time</span>
 
     <!-- todo show enabled/disabled eye via css -->
-    <div class="story-card-hide-toggle">&#x1F441;</div>
+    <span class="story-card-hide-toggle">&#x1F441;</span>
+    <div class="read-to"></div>
 </div>
