@@ -1,0 +1,12 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}">
+
+<title th:inline="text">Demo -- [[${story.title}]]</title>
+<div id="main">
+    <h1 th:inline="text">Demo -- [[${story.title}]] </h1>
+    ID:<span th:inline="text"> [[${story.id}]] </span> <br>
+    <div th:text="${fullstory}" class="full-story-text"></div>
+    <a class="btn btn-primary" th:href="@{/parent/{pid}/stories(pid=${parent.id})}" role="button">Go
+        Back</a>
+</div>
+</html>

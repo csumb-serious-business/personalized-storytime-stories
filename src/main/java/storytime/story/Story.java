@@ -3,10 +3,10 @@ package storytime.story;
 import storytime.common.HasId;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+// todo rename to StoryTemplate
 @Entity
 @Table(name = "STORY")
 public class Story implements HasId {

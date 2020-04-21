@@ -17,7 +17,9 @@ public class StoryService extends CrudService<Story, StoryRepository> {
   }
 
   public List<Story> readAll() {
-    return repository.findAll();
+    List<Story> stories = repository.findAll();
+    log.info("fetched {} stories", stories.size());
+    return stories;
   }
 
   public void populateStories() {

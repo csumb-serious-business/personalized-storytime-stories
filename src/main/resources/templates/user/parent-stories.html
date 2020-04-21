@@ -1,0 +1,29 @@
+<!-- This contains admin level info about stories
+including a list of stories with options to modify them
+
+needs a button to create a new story -->
+
+<!-- This contains admin level info about stories
+including a list of stories with options to modify them
+needs a button to create a new story -->
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/base :: layout(~{::title},~{::#main}, _, _)}">
+
+<title>Browse Stories</title>
+<div id="main">
+    <h1>Browse Stories</h1>
+    <!-- list of story cards here -->
+    <div th:if="${!stories.isEmpty()}">
+
+        <div th:each="story : ${stories}">
+            <template
+                    th:replace="~{user/snippets/story-card :: layout(${parent}, ${story})}"></template>
+        </div>
+    </div>
+    <div>
+
+    </div>
+</div>
+
+</html>
