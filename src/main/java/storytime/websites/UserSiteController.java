@@ -25,35 +25,26 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
-@EnableAutoConfiguration
-public class UserSiteController {
+@Controller @EnableAutoConfiguration public class UserSiteController {
   private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-  @Autowired
-  ParentService parentService;
+  @Autowired ParentService parentService;
 
-  @Autowired
-  ChildService childService;
+  @Autowired ChildService childService;
 
-  @Autowired
-  StoryPreferencesService storyPreferencesService;
+  @Autowired StoryPreferencesService storyPreferencesService;
 
-  @Autowired
-  StoryService storyService;
+  @Autowired StoryService storyService;
 
-  @Autowired
-  FullStoryService fullStoryService;
+  @Autowired FullStoryService fullStoryService;
 
-  @GetMapping("/")
-  public String index() {
+  @GetMapping("/") public String index() {
     log.info("GET / [website root]");
     return "user/_index";
   }
 
   /*--- Parent Account ----------------------------------------------------*/
-  @GetMapping("/sign-up")
-  public String sign_up(Model model) {
+  @GetMapping("/sign-up") public String sign_up(Model model) {
     log.info("GET /sign-up");
     model.addAttribute("parent", new Parent());
     return "user/parent-create";
@@ -80,8 +71,7 @@ public class UserSiteController {
     return "redirect:" + url;
   }
 
-  @GetMapping("/sign-in")
-  public String sign_in(Model model) {
+  @GetMapping("/sign-in") public String sign_in(Model model) {
     log.info("GET /sign-in");
     model.addAttribute("parent", new Parent());
     return "user/parent-sign-in";
@@ -106,15 +96,14 @@ public class UserSiteController {
 
     // lookup the actual parent id for path
     String url = parentService.getIdForUsername(parent.getUsername()).map(i -> "/parent/" + i)
-        .orElse("/parent");
+      .orElse("/parent");
 
     log.info("redirecting to: {}", url);
 
     return "redirect:" + url;
   }
 
-  @GetMapping("/parent/{id}")
-  public String parent__id(Model model, @PathVariable("id") long id) {
+  @GetMapping("/parent/{id}") public String parent__id(Model model, @PathVariable("id") long id) {
     log.info("GET /parent/{}", id);
 
     // todo should 404 if parent not found
@@ -124,8 +113,8 @@ public class UserSiteController {
   }
 
   // todo
-  @GetMapping("/parent/{id}/edit")
-  public String parent__id__edit(Model model, @PathVariable("id") long id) {
+  @GetMapping("/parent/{id}/edit") public String parent__id__edit(Model model,
+    @PathVariable("id") long id) {
     log.info("GET /parent/edit/{}", id);
     model.addAttribute("id", id);
     return "user/parent-edit";
@@ -134,8 +123,8 @@ public class UserSiteController {
   // todo post mapping parent/id/edit
 
   /*--- Child & Child Prefs -----------------------------------------------*/
-  @GetMapping("/parent/{id}/new-child")
-  public String parent__id__new_child(Model model, @PathVariable("id") long id) {
+  @GetMapping("/parent/{id}/new-child") public String parent__id__new_child(Model model,
+    @PathVariable("id") long id) {
     log.info("GET /parent/{}/new-child", id);
 
     // todo should 404 if parent not found
@@ -147,7 +136,7 @@ public class UserSiteController {
 
   @PostMapping("/parent/{id}/new-child")
   public String parent__id__new_child(Model model, @PathVariable("id") long id,
-      @Valid @ModelAttribute("child") Child child, BindingResult result) {
+    @Valid @ModelAttribute("child") Child child, BindingResult result) {
 
     parentService.read(id).ifPresent(child::setParent);
 
@@ -165,7 +154,7 @@ public class UserSiteController {
 
   @GetMapping("/parent/{pid}/child/{cid}/prefs")
   public String parent__pid__child__cid__prefs(Model model, @PathVariable("pid") long parentId,
-      @PathVariable("cid") long childId) {
+    @PathVariable("cid") long childId) {
     log.info("GET /parent/{}/child/{}/prefs", parentId, childId);
 
     // todo should 404 if parent or child not found
@@ -176,18 +165,18 @@ public class UserSiteController {
       model.addAttribute(c);
 
       // if child's prefs exist, add them, otherwise add a new one
-      storyPreferencesService.getStoryPreferencesForOwner(c).ifPresentOrElse(model::addAttribute,
-          () -> model.addAttribute(new StoryPreferences()));
+      storyPreferencesService.getStoryPreferencesForOwner(c)
+        .ifPresentOrElse(model::addAttribute, () -> model.addAttribute(new StoryPreferences()));
     });
 
     return "user/child-prefs";
   }
 
   // todo fix update case
-  @PostMapping("/parent/{pid}/child/{cid}/prefs")
-  public String parent__pid__child__cid__prefs(Model model, @PathVariable("pid") long parentId,
-      @PathVariable("cid") long childId, @ModelAttribute Parent parent, @ModelAttribute Child child,
-      @Valid @ModelAttribute StoryPreferences storyPreferences, BindingResult result) {
+  @PostMapping("/parent/{pid}/child/{cid}/prefs") public String parent__pid__child__cid__prefs(
+    Model model, @PathVariable("pid") long parentId, @PathVariable("cid") long childId,
+    @ModelAttribute Parent parent, @ModelAttribute Child child,
+    @Valid @ModelAttribute StoryPreferences storyPreferences, BindingResult result) {
 
     if (result.hasErrors()) {
       log.info("result: {}", result);
@@ -207,8 +196,8 @@ public class UserSiteController {
   }
 
   /*--- Stories -----------------------------------------------------------*/
-  @GetMapping("/parent/{pid}/stories")
-  public String parent__pid__stories(Model model, @PathVariable("pid") long parentId) {
+  @GetMapping("/parent/{pid}/stories") public String parent__pid__stories(Model model,
+    @PathVariable("pid") long parentId) {
     log.info("GET /parent/{}/stories", parentId);
 
     // get all stories here to populate in the view
@@ -224,7 +213,7 @@ public class UserSiteController {
 
   @GetMapping("/parent/{pid}/story/{sid}")
   public String parent__pid__story(Model model, @PathVariable("pid") long parentId,
-      @PathVariable("sid") long storyId) {
+    @PathVariable("sid") long storyId) {
     log.info("GET /parent/{}/story/{}", parentId, storyId);
 
     parentService.read(parentId).ifPresent(model::addAttribute);
@@ -234,10 +223,43 @@ public class UserSiteController {
     return "user/parent-story-read";
   }
 
-  // todo
   @GetMapping("/parent/{pid}/child/{cid}/read/{sid}")
-  public String parent__pid__child__cid__read__sid() {
-    return "";
+  public String parent__pid__child__cid__read__sid(Model model, @PathVariable("pid") long parentId,
+    @PathVariable("cid") long childId, @PathVariable("sid") long storyId) {
+    log.info("GET /parent/{}/child/{}/story/{}", parentId, childId, storyId);
+
+
+    Optional<Child> child = childService.read(childId);
+
+
+
+    // should not happen
+    if (!child.isPresent()) {
+
+      return "user/parent-home";
+
+    }
+
+    Optional<StoryPreferences> prefs =
+      storyPreferencesService.getStoryPreferencesForOwner(child.get());
+
+    // if child has no preferences go to setup preferences
+    // and then continue to story
+    if (!prefs.isPresent()) {
+      log.info("child {} has no preferences", child);
+      // todo
+      return "";
+    }
+
+    parentService.read(parentId).ifPresent(model::addAttribute);
+    child.ifPresent(model::addAttribute);
+
+    storyService.read(storyId).ifPresent(model::addAttribute);
+
+    fullStoryService.getFullStory(storyId, prefs.get().getId())
+      .ifPresent(s -> model.addAttribute("fullstory", s));
+
+    return "user/parent-story-read";
   }
 
 

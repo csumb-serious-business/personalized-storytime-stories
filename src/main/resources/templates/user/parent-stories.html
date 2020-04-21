@@ -19,7 +19,9 @@ needs a button to create a new story -->
         <div th:each="story : ${stories}">
             <template
                     th:replace="~{user/snippets/story-card :: layout(${parent}, ${story})}"></template>
+            <br/>
         </div>
+
     </div>
     <div>
 
