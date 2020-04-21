@@ -1,0 +1,116 @@
+I Want a Monkey
+${protagonist} was sure that he wanted a pet.
+
+He talked to ${dad} about which pet to get.
+
+
+
+“I want a Monkey who scratches his head!
+
+He’d swing in the house and he’d jump on the bed.”
+
+
+
+“Well,” said ${dad} in a kind sort of way,
+
+“Did you know that monkeys eat bugs everyday?”
+
+
+
+“Oh No,” ${protagonist} said, “We have none to eat.”
+
+${mom} likes to squash all the bugs with her feet.”
+
+
+
+“Then I want a Hippo!” he screamed to ${dad}.
+
+“He’d eat all our trash, and ${mom} would be glad!”
+
+
+
+“Hippos need water, it helps them stay cool.
+
+I guess we can build him a giant sized pool.”
+
+
+
+“No,” ${protagonist} said, “he’d be too big to dry,
+
+We’d need a mountain of towels to try.”
+
+
+
+“I want an Otter who triple back flips,
+
+I’d practice swimming when we go for dips.”
+
+
+
+“Did you know most otters can whistle and chirp?
+
+They growl and snort, and perhaps even burp?”
+
+
+
+“Oh,” ${protagonist} said with a sad looking frown,
+
+“We’d have to tell him to keep the noise down.”
+
+
+
+“Let’s get a Giraffe!” ${protagonist} said with a smile.
+
+“I’d slide from his neck to a giant clothes pile!”
+
+
+
+“Giraffes hold the record for tallest of all.”
+
+“The jump from their head is a twenty foot fall!”
+
+“Gosh,” ${protagonist} said as he looked at the ceiling,
+
+He’d bump his head even if he were kneeling.”
+
+
+
+“Well how ‘bout a bunny?” he said to ${dad},
+
+“A fluffy and floppy one can’t be that bad.”
+
+
+
+“Bunnies like eating and chew all your stuff.
+
+ Raising a bunny can really be tough.”
+
+
+
+“Wow,” ${protagonist} answered, “Is that really true?
+
+Picking a pet is not easy to do.”
+
+
+
+“I want a ${pet-species}!” ${protagonist} said, “Let’s get one!”
+
+“I think a ${pet-species} could be lots of fun.”
+
+
+
+“Hmm,” said ${dad}, with a look of delight.
+
+“Good idea ${protagonist}; I think that you’re right!”
+
+
+
+“They’re really good swimmers and make funny faces.
+
+And if we get two, we could watch them have races!”
+
+
+
+“Okay,” said ${dad}, “That’s just what we’ll do.
+
+One ${pet-species} for me, one ${pet-species} for you!”

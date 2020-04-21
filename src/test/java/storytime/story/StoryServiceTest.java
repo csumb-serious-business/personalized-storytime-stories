@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.FileNotFoundException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,7 +63,7 @@ class StoryServiceTest {
     }
 
     @Test
-    void populateStories__valid() {
+    void populateStories__valid() throws FileNotFoundException {
         // todo
         subject.populateStories();
     }

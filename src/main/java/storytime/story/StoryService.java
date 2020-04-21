@@ -5,7 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import storytime.common.CrudService;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Scanner;
 
 @Service
 public class StoryService extends CrudService<Story, StoryRepository> {
@@ -22,7 +25,7 @@ public class StoryService extends CrudService<Story, StoryRepository> {
     return stories;
   }
 
-  public void populateStories() {
+  public void populateStories() throws FileNotFoundException {
     // todo
 
   }
