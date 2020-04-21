@@ -10,6 +10,8 @@ import java.util.Optional;
 
 @Service
 public class ParentService extends CrudService<Parent, ParentRepository> {
+  public static final String LOGIN_FAIL_MESSAGE =
+      "Either the username doesn't exist or passphrase is incorrect";
   private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
   @Autowired
@@ -27,17 +29,12 @@ public class ParentService extends CrudService<Parent, ParentRepository> {
     // username doesn't exist or passphrase doesn't match
     if (!actual.isPresent()) {
       log.info("{} not found", username);
-      return Optional.of("Either the username doesn't exist or passphrase is incorrect");
+      return Optional.of(LOGIN_FAIL_MESSAGE);
     } else if (!actual.get().getPassphrase().equals(passphrase)) {
       log.info("{} != {}", passphrase, actual.get().getPassphrase());
-      return Optional.of("Either the username doesn't exist or passphrase is incorrect");
+      return Optional.of(LOGIN_FAIL_MESSAGE);
     }
     return Optional.empty();
-  }
-
-  private Optional<Parent> readUsingUsername(String username) {
-    log.info("readUsingUsername({})", username);
-    return repository.findByUsername(username).stream().findFirst();
   }
 
   public Optional<Long> getIdForUsername(String username) {
