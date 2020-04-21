@@ -22,9 +22,4 @@ public class StoryService extends CrudService<Story, StoryRepository> {
     return stories;
   }
 
-  public void populateStories() {
-    // todo
-
-  }
-
 }

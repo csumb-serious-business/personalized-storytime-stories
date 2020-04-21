@@ -97,4 +97,9 @@ class TemplatedStringTest {
     assertThat(actual).isEqualTo(expect);
   }
 
+  @Test void getContents() {
+    subject = new TemplatedString(content_one_match);
+    assertThat(subject.getContents()).isEqualTo(content_one_match);
+  }
+
 }

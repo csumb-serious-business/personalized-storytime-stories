@@ -12,103 +12,90 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
-@SpringBootTest
-class ParentServiceTest {
+@SpringBootTest class ParentServiceTest {
 
-    // predefined test objects
-    private static final Parent validParent = new Parent(0, "Parent",
-            "passphrase", new HashSet<>());
-    private static final Parent dupeNameParentA = new Parent(1, "Dupe Parent",
-            "passphrase", new HashSet<>());
-    private static final Parent dupeNameParentB = new Parent(2, "Dupe Parent",
-            "passphrase", new HashSet<>());
+  // predefined test objects
+  private static final Parent validParent = new Parent(0, "Parent", "passphrase", new HashSet<>());
+  private static final Parent modifiedParent =
+    new Parent(0, "Parent", "new passphrase", new HashSet<>());
+  private static final Parent dupeNameParentA =
+    new Parent(1, "Dupe Parent", "passphrase", new HashSet<>());
+  private static final Parent dupeNameParentB =
+    new Parent(2, "Dupe Parent", "passphrase", new HashSet<>());
 
-    private static final Parent emptyParent = new Parent();
+  private static final Parent emptyParent = new Parent();
 
-    // test subject
-    private ParentService subject;
+  // test subject
+  private ParentService subject;
 
-    @Mock
-    private ParentRepository parentRepository;
+  @Mock private ParentRepository parentRepository;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.initMocks(this);
+  @BeforeEach void setUp() {
+    MockitoAnnotations.initMocks(this);
 
-        subject = new ParentService(parentRepository);
+    subject = new ParentService(parentRepository);
 
-        // mock parent-repo
-        given(parentRepository.findById(0L)).willReturn(Optional.of(validParent));
-        given(parentRepository.findById(-1L)).willReturn(Optional.empty());
+    // mock parent-repo
+    given(parentRepository.findById(0L)).willReturn(Optional.of(validParent));
+    given(parentRepository.findById(-1L)).willReturn(Optional.empty());
 
-        given(parentRepository.findByUsername("Parent")).willReturn(List.of(validParent));
+    given(parentRepository.findByUsername("Parent")).willReturn(List.of(validParent));
 
-        // note, username is enforced to be unique in entity, this is just a safeguard check
-        given(parentRepository.findByUsername("Dupe Parent")).willReturn(List.of(dupeNameParentA, dupeNameParentB));
-        given(parentRepository.findByUsername("NOBODY")).willReturn(List.of());
+    // note, username is enforced to be unique in entity, this is just a safeguard check
+    given(parentRepository.findByUsername("Dupe Parent"))
+      .willReturn(List.of(dupeNameParentA, dupeNameParentB));
+    given(parentRepository.findByUsername("NOBODY")).willReturn(List.of());
 
-        given(parentRepository.save(validParent)).willReturn(validParent);
-        given(parentRepository.save(emptyParent)).willThrow(new IllegalArgumentException());
-    }
+    given(parentRepository.save(validParent)).willReturn(validParent);
+    given(parentRepository.save(emptyParent)).willThrow(new IllegalArgumentException());
+  }
 
-    @AfterEach
-    void tearDown() {
+  @AfterEach void tearDown() {
 
-    }
+  }
 
-    @Test
-    void persist__valid_parent() {
-        assertTrue(subject.create(validParent));
-    }
+  @Test void getIdForUsername__found_one() {
+    Optional<Long> actual = subject.getIdForUsername("Parent");
+    Optional<Long> expect = Optional.of(validParent.getId());
 
-    @Test
-    void persist__invalid_parent() {
-        assertFalse(subject.create(emptyParent));
-    }
+    assertThat(actual).isEqualTo(expect);
+  }
 
-    @Test
-    void getParentById__found() {
-        Optional<Parent> actual = subject.read(0L);
-        Optional<Parent> expect = Optional.of(validParent);
+  @Test void getIdForUsername__found_none() {
+    Optional<Long> actual = subject.getIdForUsername("NOBODY");
+    Optional<Long> expect = Optional.empty();
 
-        assertThat(actual).isEqualTo(expect);
-    }
+    assertThat(actual).isEqualTo(expect);
+  }
 
-    @Test
-    void getParentById__not_found() {
-        Optional<Parent> actual = subject.read(-1L);
-        Optional<Parent> expect = Optional.empty();
+  @Test void getIdForUsername__found_two() {
+    Optional<Long> actual = subject.getIdForUsername("Dupe Parent");
+    Optional<Long> expect = Optional.of(dupeNameParentA.getId());
 
-        assertThat(actual).isEqualTo(expect);
-    }
+    assertThat(actual).isEqualTo(expect);
+  }
 
-    @Test
-    void getIdForUsername__found_one() {
-        Optional<Long> actual = subject.getIdForUsername("Parent");
-        Optional<Long> expect = Optional.of(validParent.getId());
+  @Test void loginAttempt__valid() {
+    Optional<String> actual = subject.loginAttempt(validParent);
+    Optional<String> expect = Optional.empty();
 
-        assertThat(actual).isEqualTo(expect);
-    }
+    assertThat(actual).isEqualTo(expect);
+  }
 
-    @Test
-    void getIdForUsername__found_none() {
-        Optional<Long> actual = subject.getIdForUsername("NOBODY");
-        Optional<Long> expect = Optional.empty();
+  @Test void loginAttempt__does_not_exist() {
+    Optional<String> actual = subject.loginAttempt(emptyParent);
+    Optional<String> expect = Optional.of(ParentService.LOGIN_FAIL_MESSAGE);
 
-        assertThat(actual).isEqualTo(expect);
-    }
+    assertThat(actual).isEqualTo(expect);
+  }
 
-    @Test
-    void getIdForUsername__found_two() {
-        Optional<Long> actual = subject.getIdForUsername("Dupe Parent");
-        Optional<Long> expect = Optional.of(dupeNameParentA.getId());
+  @Test void loginAttempt__wrong_pasphrase() {
+    Optional<String> actual = subject.loginAttempt(modifiedParent);
+    Optional<String> expect = Optional.of(ParentService.LOGIN_FAIL_MESSAGE);
 
-        assertThat(actual).isEqualTo(expect);
-    }
-
+    assertThat(actual).isEqualTo(expect);
+  }
 
 }
