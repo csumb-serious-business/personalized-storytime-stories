@@ -6,6 +6,7 @@
     <h1 th:inline="text">Demo -- [[${story.title}]] </h1>
     ID:<span th:inline="text"> [[${story.id}]] </span> <br>
     <div th:text="${fullstory}" class="full-story-text"></div>
+    <br/>
     <a class="btn btn-primary" th:href="@{/parent/{pid}/stories(pid=${parent.id})}" role="button">Go
         Back</a>
 </div>

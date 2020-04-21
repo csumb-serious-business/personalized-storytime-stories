@@ -15,5 +15,12 @@
 
     <!-- todo show enabled/disabled eye via css -->
     <span class="story-card-hide-toggle">&#x1F441;</span>
-    <div class="read-to"></div>
+    <div class="read-to-list">
+        <div th:if="${!parent.children.isEmpty()}">
+            <div th:each="child : ${parent.children}">
+                <a th:href="@{/parent/{pid}/child/{cid}/read/{sid}(pid=${parent.id}, cid=${child.id}, sid=${story.id})}">read
+                    to [[${child.name}]]</a>
+            </div>
+        </div>
+    </div>
 </div>

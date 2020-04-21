@@ -11,6 +11,7 @@
     <div><a th:href="@{/parent/{id}/stories(id=${parent.id})}"
             class="btn btn-primary">Browse Stories
     </a></div>
+    <br/>
 
     <!-- list of children -->
     <div th:if="${!parent.children.isEmpty()}">
