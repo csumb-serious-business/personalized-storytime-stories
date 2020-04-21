@@ -14,6 +14,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+// note, don't use this style of test, instead create a MVC test
+// like: StoryRestControllerMVCTest
 @SpringBootTest
 class StoryRestControllerTest {
 
@@ -51,13 +53,13 @@ class StoryRestControllerTest {
 
     @Test
     void getStoryById__valid() {
-        ResponseEntity<Story> actual = subject.getStoryById(story.getId());
+        ResponseEntity<Story> actual = subject.api__ver__id(story.getId());
         assertThat(actual).isEqualTo(responseOK);
     }
 
     @Test
     void getStoryById__invalid() {
-        ResponseEntity<Story> actual = subject.getStoryById(-1L);
+        ResponseEntity<Story> actual = subject.api__ver__id(-1L);
         assertThat(actual).isEqualTo(responseNF);
 
     }
