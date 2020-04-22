@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -17,6 +18,7 @@ import storytime.story.StoryService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Controller
 @EnableAutoConfiguration
@@ -64,15 +66,20 @@ public class AdminSiteController {
   @GetMapping("/admin/story/{id}")
   public String admin__story__id(Model model, @PathVariable("id") long id) {
     log.info("GET /admin/story/{}", id);
-    storyService.read(id).ifPresent(model::addAttribute);
+    AtomicReference<String> url = new AtomicReference<>();
+    storyService.read(id).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
 
-    return "admin/story-show";
+    return "/admin/story-show";
   }
 
   @GetMapping("/admin/story/{id}/edit")
   public String admin__story__id__edit(ModelMap model, @PathVariable("id") long id) {
     log.info("GET /admin/story/{}/edit", id);
-    storyService.read(id).ifPresent(model::addAttribute);
+    storyService.read(id).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
 
     return "admin/story-edit";
   }
