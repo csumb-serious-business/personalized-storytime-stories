@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   // predefined objects
   private static final Story storyA = new Story(1L, "title A", "content A");
   private static final Story storyB = new Story(2L, "title B", "content B");
+  private static final Story emptyStory = new Story();
 
   // mocked dependencies
   @MockBean private StoryService storyService;
@@ -78,9 +79,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
       .contentType(MediaType.APPLICATION_FORM_URLENCODED)
       .param("title", storyA.getTitle())
       .param("content", storyA.getContent())
-    )
-      .andExpect(status().is3xxRedirection())
-      .andExpect(redirectedUrl("/admin/stories"));
+    ).andExpect(status().is3xxRedirection())
+     .andExpect(redirectedUrl("/admin/stories"));
   }
 
   @Test void post___admin__story__new_story___invalid() throws Exception {
@@ -94,27 +94,71 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   }
 
 
-  @Test void get___admin__story__id___valid() {
+  @Test void get___admin__story__id___valid() throws Exception{
+    given(storyService.read(storyA.getId())).willReturn(Optional.of(storyA));
+    mvc.perform(get("/admin/story/" + storyA.getId()))
+      .andExpect(status().isOk())
+      .andExpect(model().attribute("story", hasProperty("id", is(storyA.getId()))));
   }
 
-  @Test void get___admin__story__id___invalid() {
+  @Test void get___admin__story__id___invalid() throws Exception {
+    given(storyService.read(-1L)).willReturn(Optional.empty());
+    mvc.perform(get("/admin/story/" + -1))
+      .andExpect(status().is4xxClientError());
   }
 
-  @Test void get___admin__story__id__edit__valid() {
+  @Test void get___admin__story__id__edit__valid() throws Exception {
+    given(storyService.read(storyA.getId())).willReturn(Optional.of(storyA));
+    mvc.perform(get("/admin/story/" + storyA.getId() + "/edit"))
+      .andExpect(status().isOk())
+      .andExpect(model().attribute("story", hasProperty("id", is(storyA.getId()))));
   }
 
-  @Test void get___admin__story__id__edit__invalid() {
+  @Test void get___admin__story__id__edit__invalid()  throws Exception {
+    given(storyService.read(-1L)).willReturn(Optional.empty());
+    mvc.perform(get("/admin/story/" + -1 + "/edit"))
+      .andExpect(status().is4xxClientError());
   }
 
-  @Test void post___admin__story__id__edit___valid() {
+  @Test void post___admin__story__id__edit___valid()  throws Exception {
+    given(storyService.update(storyA)).willReturn(true);
+    mvc.perform(post("/admin/story/" + storyA.getId() + "/edit")
+      .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+      .param("title", storyA.getTitle())
+      .param("content", storyA.getContent())
+    ).andExpect(status().is3xxRedirection())
+      .andExpect(redirectedUrl("/admin/stories"));
+
   }
 
-  @Test void post___admin__story__id__edit___invalid() {
+  @Test void post___admin__story__id__edit___invalid()  throws Exception {
+    given(storyService.update(emptyStory)).willReturn(false);
+    mvc.perform(get("/admin/story/" + -1 + "/edit"))
+      .andExpect(status().is4xxClientError());
   }
 
-  @Test void get___admin__story__id__delete___valid() {
+  @Test void post___admin__story__id__edit___errors()  throws Exception {
+    mvc.perform(post("/admin/story/" + storyA.getId() + "/edit")
+      .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+      .param("title", "aa")
+      .param("content", "aa")
+    )
+      .andExpect(status().isOk())
+      .andExpect(model().attributeHasFieldErrors("story"));
+
   }
 
-  @Test void get___admin__story__id__delete___invalid() {
+  @Test void get___admin__story__id__delete___valid()  throws Exception {
+    given(storyService.delete(storyA)).willReturn(true);
+    mvc.perform(get("/admin/story/" + storyA.getId() + "/delete"))
+      .andExpect(status().is3xxRedirection())
+      .andExpect(redirectedUrl("/admin/stories"));
+  }
+
+  @Test void get___admin__story__id__delete___invalid()  throws Exception {
+    given(storyService.delete(storyA)).willReturn(false);
+    mvc.perform(get("/admin/story/" + storyA.getId() + "/delete"))
+      .andExpect(status().is3xxRedirection())
+      .andExpect(redirectedUrl("/admin/stories"));
   }
 }
