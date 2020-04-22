@@ -94,22 +94,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   }
 
   @Test void get___admin__story__id___valid() throws Exception {
-	  mvc.perform(get("/admin/story/"+storyA.getId())
+	  mvc.perform(get("/admin/story/{id}", 1L)
 			  .contentType(MediaType.APPLICATION_FORM_URLENCODED)
 			  .param("id", "1L")
-	  )
-	      .andExpect(status().isOk())
-	      .andExpect(model().attribute("story", hasProperty("id", is(1L))));
-////	  .andExpect(model().attribute("story", hasProperty("id", is(1L))));
-//	  
-//	  
-////	  mvc.perform(get("/admin/story/{id}", 1L)
-////			  .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-////			  .param("id", "1L")
-////			  )
-////	  .andExpect(status().isOk());
-////	      .andExpect(model().attribute("story", hasProperty("id", is(0L))));
-////	  .andExpect(model().attribute("story", hasProperty("id", is(1L))));
+			  )
+	  .andExpect(status().isOk())
+	  .andExpect(model().attribute("story", hasProperty("id", is(1L))));
 
   }
 

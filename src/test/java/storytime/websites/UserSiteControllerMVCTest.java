@@ -81,18 +81,18 @@ class UserSiteControllerMVCTest {
 	      .andExpect(model().attribute("parent", hasProperty("id", is(0L))));
   }
 
-////todo test valid sign up
-//@Test void  post__user__parent__signup__valid() throws Exception {
-//	 mvc.perform(post("/sign-up")
-//		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
-//	 	.param("username", parentA.getUsername())
-//	 	.param("passphrase", parentA.getPassphrase())
-//		)
-//		.andExpect(status().is3xxRedirection())
-////		.andExpect(redirectedUrl("/parent/"+parentA.getId()));
-//		.andExpect(redirectedUrl("redirect:"+"/parent/"+parentA.getId()));
-//	      
-//  }
+//todo test valid sign up
+@Test void  post__user__parent__signup__valid() throws Exception {
+	 mvc.perform(post("/sign-up")
+		.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+	 	.param("username", parentA.getUsername())
+	 	.param("passphrase", parentA.getPassphrase())
+		)
+		.andExpect(status().is3xxRedirection())
+//		.andExpect(redirectedUrl("/parent/"+parentA.getId()));
+		.andExpect(redirectedUrl("redirect:"+"/parent/"+parentA.getId()));
+	      
+  }
 
 @Test void  post__user__parent__signup__invalid() throws Exception {
 	 mvc.perform(post("/sign-up")
@@ -103,16 +103,16 @@ class UserSiteControllerMVCTest {
 		.andExpect(status().isOk())
 		.andExpect(model().attributeHasFieldErrors("parent"));
  }
-////todo test duplicate
-//@Test void  post__user__parent__signup__invalid__duplicate() throws Exception {
-//	 mvc.perform(post("/sign-up")
-//		 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-//		 .param("username", parentADuplicate.getUsername())
-//		 .param("passphrase", parentADuplicate.getPassphrase())
-//		 )
-//		.andExpect(status().is3xxRedirection())
-//		.andExpect(redirectedUrl("redirect:"+"/parent/"+parentADuplicate.getId()));
-//}
+//todo test duplicate
+@Test void  post__user__parent__signup__invalid__duplicate() throws Exception {
+	 mvc.perform(post("/sign-up")
+		 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+		 .param("username", parentADuplicate.getUsername())
+		 .param("passphrase", parentADuplicate.getPassphrase())
+		 )
+		.andExpect(status().is3xxRedirection())
+		.andExpect(redirectedUrl("redirect:"+"/parent/"+parentADuplicate.getId()));
+}
   @Test void post__user__parent__signin__valid() throws Exception {
 	 mvc.perform(post("/sign-in")
 		 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
