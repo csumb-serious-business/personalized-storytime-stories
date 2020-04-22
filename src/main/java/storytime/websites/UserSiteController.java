@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,7 @@ import storytime.story.StoryService;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Controller
 @EnableAutoConfiguration
@@ -69,12 +71,13 @@ public class UserSiteController {
     log.info("POST /sign-up -- parent");
 
     // persist will only fail on dupe username?
-    if (!parentService.create(parent)) {
+    Optional<Parent> created = parentService.create(parent);
+    if (!created.isPresent()) {
       result.rejectValue("username", "error.user", parent.getUsername() + " is already taken.");
       return "user/parent-create";
     }
 
-    String url = "/parent/" + parent.getId();
+    String url = "/parent/" + created.get().getId();
     log.info("redirecting to: {}", url);
 
     return "redirect:" + url;
@@ -118,7 +121,9 @@ public class UserSiteController {
     log.info("GET /parent/{}", id);
 
     // todo should 404 if parent not found
-    parentService.read(id).ifPresent(model::addAttribute);
+    parentService.read(id).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
 
     return "user/parent-home";
   }
@@ -127,7 +132,11 @@ public class UserSiteController {
   @GetMapping("/parent/{id}/edit")
   public String parent__id__edit(Model model, @PathVariable("id") long id) {
     log.info("GET /parent/edit/{}", id);
-    model.addAttribute("id", id);
+
+    parentService.read(id).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
+
     return "user/parent-edit";
   }
 
@@ -138,8 +147,10 @@ public class UserSiteController {
   public String parent__id__new_child(Model model, @PathVariable("id") long id) {
     log.info("GET /parent/{}/new-child", id);
 
-    // todo should 404 if parent not found
-    parentService.read(id).ifPresent(model::addAttribute);
+    parentService.read(id).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
+
     model.addAttribute("child", new Child());
 
     return "user/child-create";
@@ -149,7 +160,15 @@ public class UserSiteController {
   public String parent__id__new_child(Model model, @PathVariable("id") long id,
       @Valid @ModelAttribute("child") Child child, BindingResult result) {
 
-    parentService.read(id).ifPresent(child::setParent);
+    Optional<Parent> parent = parentService.read(id);
+    AtomicReference<String> url = new AtomicReference<>();
+
+    parent.ifPresentOrElse(p -> {
+      child.setParent(p);
+      url.set("/parent/" + p.getId());
+    }, () -> {
+      throw new ResourceNotFoundException();
+    });
 
     if (result.hasErrors()) {
       log.info("result: {}", result);
@@ -160,7 +179,7 @@ public class UserSiteController {
 
     childService.create(child);
 
-    return parent__id(model, id);
+    return "redirect:" + url.get();
   }
 
   @GetMapping("/parent/{pid}/child/{cid}/prefs")
@@ -168,9 +187,10 @@ public class UserSiteController {
       @PathVariable("cid") long childId) {
     log.info("GET /parent/{}/child/{}/prefs", parentId, childId);
 
-    // todo should 404 if parent or child not found
-    parentService.read(parentId).ifPresent(model::addAttribute);
-    childService.read(childId).ifPresent(c -> {
+    parentService.read(parentId).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
+    childService.read(childId).ifPresentOrElse(c -> {
 
       // if child exists add it
       model.addAttribute(c);
@@ -178,12 +198,13 @@ public class UserSiteController {
       // if child's prefs exist, add them, otherwise add a new one
       storyPreferencesService.getStoryPreferencesForOwner(c).ifPresentOrElse(model::addAttribute,
           () -> model.addAttribute(new StoryPreferences()));
+    }, () -> {
+      throw new ResourceNotFoundException();
     });
 
     return "user/child-prefs";
   }
 
-  // todo fix update case
   @PostMapping("/parent/{pid}/child/{cid}/prefs")
   public String parent__pid__child__cid__prefs(Model model, @PathVariable("pid") long parentId,
       @PathVariable("cid") long childId, @ModelAttribute Parent parent, @ModelAttribute Child child,
@@ -199,11 +220,17 @@ public class UserSiteController {
     log.info("POST /parent/{}/child/{}/prefs -- prefs: {}", parentId, childId, storyPreferences);
 
     // if we got here, child should always exist
-    childService.read(childId).ifPresent(storyPreferences::setOwner);
+    childService.read(childId).ifPresentOrElse(storyPreferences::setOwner, () -> {
+      throw new ResourceNotFoundException();
+    });
 
     storyPreferencesService.createOrUpdate(storyPreferences);
+    AtomicReference<String> url = new AtomicReference<>();
+    parentService.read(parentId).ifPresentOrElse(p -> url.set("/parent/" + p.getId()), () -> {
+      throw new ResourceNotFoundException();
+    });
 
-    return parent__id(model, parentId);
+    return "redirect:" + url;
   }
 
   /*--- Stories -----------------------------------------------------------*/
@@ -215,7 +242,9 @@ public class UserSiteController {
     // todo instead of showing all stories, show recommended stories
 
     List<Story> stories = storyService.readAll();
-    parentService.read(parentId).ifPresent(model::addAttribute);
+    parentService.read(parentId).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
 
     model.addAttribute("stories", stories);
 
@@ -227,8 +256,12 @@ public class UserSiteController {
       @PathVariable("sid") long storyId) {
     log.info("GET /parent/{}/story/{}", parentId, storyId);
 
-    parentService.read(parentId).ifPresent(model::addAttribute);
-    storyService.read(storyId).ifPresent(model::addAttribute);
+    parentService.read(parentId).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
+    storyService.read(storyId).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
     fullStoryService.getDefault(storyId).ifPresent(s -> model.addAttribute("fullstory", s));
 
     return "user/parent-story-read";
@@ -246,9 +279,7 @@ public class UserSiteController {
 
     // should not happen
     if (!child.isPresent()) {
-
-      return "user/parent-home";
-
+      return "redirect:/parent/" + parentId;
     }
 
     Optional<StoryPreferences> prefs =
@@ -258,14 +289,18 @@ public class UserSiteController {
     // and then continue to story
     if (!prefs.isPresent()) {
       log.info("child {} has no preferences", child);
-      // todo
-      return "";
+      throw new ResourceNotFoundException();
+      // return ""; // todo create page for setting prefs (with additional message)
     }
 
-    parentService.read(parentId).ifPresent(model::addAttribute);
+    parentService.read(parentId).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
     child.ifPresent(model::addAttribute);
 
-    storyService.read(storyId).ifPresent(model::addAttribute);
+    storyService.read(storyId).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
 
     fullStoryService.getFullStory(storyId, prefs.get().getId())
         .ifPresent(s -> model.addAttribute("fullstory", s));

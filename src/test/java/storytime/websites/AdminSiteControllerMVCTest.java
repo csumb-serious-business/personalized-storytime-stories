@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.json.JacksonTester;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   private JacksonTester<Story> storyFixture;
 
   @BeforeEach void setUp() {
+    MockitoAnnotations.initMocks(this);
     JacksonTester.initFields(this, new ObjectMapper());
   }
 
@@ -121,7 +122,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   }
 
   @Test void post___admin__story__id__edit___valid()  throws Exception {
-    given(storyService.update(storyA)).willReturn(true);
+    given(storyService.update(storyA)).willReturn(Optional.of(storyA));
     mvc.perform(post("/admin/story/" + storyA.getId() + "/edit")
       .contentType(MediaType.APPLICATION_FORM_URLENCODED)
       .param("title", storyA.getTitle())
@@ -132,7 +133,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
   }
 
   @Test void post___admin__story__id__edit___invalid()  throws Exception {
-    given(storyService.update(emptyStory)).willReturn(false);
+    given(storyService.update(emptyStory)).willReturn(Optional.empty());
     mvc.perform(get("/admin/story/" + -1 + "/edit"))
       .andExpect(status().is4xxClientError());
   }

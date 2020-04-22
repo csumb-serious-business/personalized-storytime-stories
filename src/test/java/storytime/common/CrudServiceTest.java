@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,11 +51,11 @@ import static org.mockito.Mockito.doThrow;
   }
 
   @Test void create__valid() {
-    assertTrue(subject.create(validFakeString));
+    assertThat(subject.create(validFakeString)).isEqualTo(Optional.of(validFakeString));
   }
 
   @Test void create__invalid() {
-    assertFalse(subject.create(emptyFakeString));
+    assertThat(subject.create(emptyFakeString)).isEqualTo(Optional.empty());
   }
 
   @Test void read__valid() {
@@ -74,11 +75,11 @@ import static org.mockito.Mockito.doThrow;
   }
 
   @Test void update__valid() {
-    assertTrue(subject.update(validFakeString));
+    assertThat(subject.update(validFakeString)).isEqualTo(Optional.of(validFakeString));
   }
 
   @Test void update__invalid() {
-    assertFalse(subject.update(emptyFakeString));
+    assertThat(subject.update(emptyFakeString)).isEqualTo(Optional.empty());
   }
 
   @Test void delete__valid() {
