@@ -100,37 +100,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 	  )
 	      .andExpect(status().isOk())
 	      .andExpect(model().attribute("story", hasProperty("id", is(1L))));
-//	  .andExpect(model().attribute("story", hasProperty("id", is(1L))));
-	  
-	  
-//	  mvc.perform(get("/admin/story/{id}", 1L)
-//			  .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-//			  .param("id", "1L")
-//			  )
-//	  .andExpect(status().isOk());
+////	  .andExpect(model().attribute("story", hasProperty("id", is(1L))));
+//	  
+//	  
+////	  mvc.perform(get("/admin/story/{id}", 1L)
+////			  .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+////			  .param("id", "1L")
+////			  )
+////	  .andExpect(status().isOk());
 ////	      .andExpect(model().attribute("story", hasProperty("id", is(0L))));
 ////	  .andExpect(model().attribute("story", hasProperty("id", is(1L))));
 
   }
-//
-//  @Test void get___admin__story__id___invalid() {
-//  }
-//
-//  @Test void get___admin__story__id__edit__valid() {
-//  }
-//
-//  @Test void get___admin__story__id__edit__invalid() {
-//  }
-//
-//  @Test void post___admin__story__id__edit___valid() {
-//  }
-//
-//  @Test void post___admin__story__id__edit___invalid() {
-//  }
-//
-//  @Test void get___admin__story__id__delete___valid() {
-//  }
-//
-//  @Test void get___admin__story__id__delete___invalid() {
-//  }
+
+  @Test void get___admin__story__id___invalid() {
+  }
+
+  @Test void get___admin__story__id__edit__valid() {
+  }
+
+  @Test void get___admin__story__id__edit__invalid() {
+  }
+
+  @Test void post___admin__story__id__edit___valid() {
+  }
+
+  @Test void post___admin__story__id__edit___invalid() {
+  }
+
+  @Test void get___admin__story__id__delete___valid() {
+  }
+
+  @Test void get___admin__story__id__delete___invalid() {
+  }
 }
