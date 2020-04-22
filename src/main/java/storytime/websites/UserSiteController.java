@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -69,12 +70,13 @@ public class UserSiteController {
     log.info("POST /sign-up -- parent");
 
     // persist will only fail on dupe username?
-    if (!parentService.create(parent)) {
+    Optional<Parent> created = parentService.create(parent);
+    if (!created.isPresent()) {
       result.rejectValue("username", "error.user", parent.getUsername() + " is already taken.");
       return "user/parent-create";
     }
 
-    String url = "/parent/" + parent.getId();
+    String url = "/parent/" + created.get().getId();
     log.info("redirecting to: {}", url);
 
     return "redirect:" + url;
@@ -118,7 +120,9 @@ public class UserSiteController {
     log.info("GET /parent/{}", id);
 
     // todo should 404 if parent not found
-    parentService.read(id).ifPresent(model::addAttribute);
+    parentService.read(id).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
 
     return "user/parent-home";
   }
@@ -127,7 +131,11 @@ public class UserSiteController {
   @GetMapping("/parent/{id}/edit")
   public String parent__id__edit(Model model, @PathVariable("id") long id) {
     log.info("GET /parent/edit/{}", id);
-    model.addAttribute("id", id);
+
+    parentService.read(id).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
+
     return "user/parent-edit";
   }
 
@@ -138,8 +146,10 @@ public class UserSiteController {
   public String parent__id__new_child(Model model, @PathVariable("id") long id) {
     log.info("GET /parent/{}/new-child", id);
 
-    // todo should 404 if parent not found
-    parentService.read(id).ifPresent(model::addAttribute);
+    parentService.read(id).ifPresentOrElse(model::addAttribute, () -> {
+      throw new ResourceNotFoundException();
+    });
+
     model.addAttribute("child", new Child());
 
     return "user/child-create";

@@ -15,15 +15,15 @@ public abstract class CrudService<T extends HasId, R extends JpaRepository<T, Lo
     this.repository = repository;
   }
 
-  public boolean create(T t) {
+  public Optional<T> create(T t) {
     try {
       log.info("create({})", t);
       repository.save(t);
     } catch (Exception e) {
       log.info("error -- {}, {}", e.getMessage(), e.getStackTrace());
-      return false;
+      return Optional.empty();
     }
-    return true;
+    return Optional.of(t);
   }
 
   public Optional<T> read(Long id) {
@@ -31,15 +31,15 @@ public abstract class CrudService<T extends HasId, R extends JpaRepository<T, Lo
     return repository.findById(id).stream().findFirst();
   }
 
-  public boolean update(T t) {
+  public Optional<T> update(T t) {
     try {
       log.info("update({})", t);
       repository.save(t);
     } catch (Exception e) {
       log.info("error -- {}, {}", e.getMessage(), e.getStackTrace());
-      return false;
+      return Optional.empty();
     }
-    return true;
+    return Optional.of(t);
   }
 
   public boolean delete(T t) {
