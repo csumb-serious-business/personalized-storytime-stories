@@ -27,3 +27,4 @@ the application should then be accessable at: [localhost:8090/](http://localhost
 # Attributions
 [Font Awesome Icons](https://github.com/FortAwesome/Font-Awesome) by [Fonticons, Inc.](https://fontawesome.com/) is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 
+Children's books provided by [Pajama Publishing Inc.](https://www.freechildrenstories.com/) and [Monkey Pen](https://monkeypen.com/pages/free-childrens-books)
