@@ -1,4 +1,4 @@
-insert into story values(1, 'I Want a Monkey', '${protagonist} was sure that he wanted a pet.
+insert ignore into `story` (`id`, `title`, `content`) values(1, 'I Want a Monkey', '${protagonist} was sure that he wanted a pet.
 
 He talked to ${dad} about which pet to get.
 
@@ -112,9 +112,9 @@ And if we get two, we could watch them have races!”
 
 “Okay,” said ${dad}, “That’s just what we’ll do.
 
-One ${pet-species} for me, one ${pet-species} for you!”');
+One ${pet-species} for me, one ${pet-species} for you!”'),
 
-insert into story values(2, 'The Friendly Girrafe', 'Once upon a time, there was a giraffe named
+(2, 'The Friendly Girrafe', 'Once upon a time, there was a giraffe named
 ${protagonist}. ${protagonist} lived in Kenya, a country in
 Africa. Like all giraffes, ${protagonist} had a long neck
 and long legs. Because she was so tall, she was
@@ -267,9 +267,9 @@ so they didn’t have to make that long trip to the
 edge of the jungle. Everyone would soon have
 enough food and water. So ${protagonist}, the Giraffe
 went back to her favorite tree and continued
-to munch on the leaves and buds.');
+to munch on the leaves and buds.'),
 
-insert into story values(3, 'Space Captain', 'Princess ${sister} always has the best birthday parties
+(3, 'Space Captain', 'Princess ${sister} always has the best birthday parties
 and this year friends from all over the galaxy were
 heading to her planet to enjoy the celebrations.
 Captain ${protagonist} and his wonder ${pet-species} ${pet} had
