@@ -1,4 +1,5 @@
 package storytime.websites;
+import static org.hamcrest.Matchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -15,8 +16,7 @@ import storytime.story.StoryService;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -51,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
   }
 
-  @Test void get___admin__stories___two() throws Exception {
+@Test void get___admin__stories___two() throws Exception {
     given(storyService.readAll()).willReturn(List.of(storyA, storyB));
     mvc.perform(get("/admin/stories"))
       .andExpect(status().isOk())
@@ -93,28 +93,44 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
       .andExpect(model().attributeHasFieldErrors("story"));
   }
 
+  @Test void get___admin__story__id___valid() throws Exception {
+	  mvc.perform(get("/admin/story/"+storyA.getId())
+			  .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+			  .param("id", "1L")
+	  )
+	      .andExpect(status().isOk())
+	      .andExpect(model().attribute("story", hasProperty("id", is(1L))));
+//	  .andExpect(model().attribute("story", hasProperty("id", is(1L))));
+	  
+	  
+//	  mvc.perform(get("/admin/story/{id}", 1L)
+//			  .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+//			  .param("id", "1L")
+//			  )
+//	  .andExpect(status().isOk());
+////	      .andExpect(model().attribute("story", hasProperty("id", is(0L))));
+////	  .andExpect(model().attribute("story", hasProperty("id", is(1L))));
 
-  @Test void get___admin__story__id___valid() {
   }
-
-  @Test void get___admin__story__id___invalid() {
-  }
-
-  @Test void get___admin__story__id__edit__valid() {
-  }
-
-  @Test void get___admin__story__id__edit__invalid() {
-  }
-
-  @Test void post___admin__story__id__edit___valid() {
-  }
-
-  @Test void post___admin__story__id__edit___invalid() {
-  }
-
-  @Test void get___admin__story__id__delete___valid() {
-  }
-
-  @Test void get___admin__story__id__delete___invalid() {
-  }
+//
+//  @Test void get___admin__story__id___invalid() {
+//  }
+//
+//  @Test void get___admin__story__id__edit__valid() {
+//  }
+//
+//  @Test void get___admin__story__id__edit__invalid() {
+//  }
+//
+//  @Test void post___admin__story__id__edit___valid() {
+//  }
+//
+//  @Test void post___admin__story__id__edit___invalid() {
+//  }
+//
+//  @Test void get___admin__story__id__delete___valid() {
+//  }
+//
+//  @Test void get___admin__story__id__delete___invalid() {
+//  }
 }
