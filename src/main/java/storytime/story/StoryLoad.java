@@ -13,12 +13,14 @@ import javax.sql.DataSource;
 @Configuration
 public class StoryLoad {
 
-   @Bean
-   public ResourceDatabasePopulator resourceDatabasePopulator(@Qualifier("dataSource") DataSource dataSource) {
-       ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator(new ClassPathResource("/import.sql"));
-       resourceDatabasePopulator.setContinueOnError(true);
-       resourceDatabasePopulator.execute(dataSource);
-       return resourceDatabasePopulator;
-   }
+  @Bean
+  public ResourceDatabasePopulator resourceDatabasePopulator(
+      @Qualifier("dataSource") DataSource dataSource) {
+    ResourceDatabasePopulator resourceDatabasePopulator =
+        new ResourceDatabasePopulator(new ClassPathResource("/import.sql"));
+    resourceDatabasePopulator.setContinueOnError(true);
+    resourceDatabasePopulator.execute(dataSource);
+    return resourceDatabasePopulator;
+  }
 
 }
